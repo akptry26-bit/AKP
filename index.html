@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>ஸ்ரீ லட்சுமி பைனான்ஸ் | Sri Lakshmi Finance</title>
+  <title>ஸ்ரீ லெட்சுமி பைனான்ஸ் | Sri Lakshmi Finance</title>
   <style>
     :root {
       --bg-page: #f8fafc;
@@ -1540,6 +1540,16 @@
       background: #fafbfc;
     }
 
+    table.corp-table tfoot td {
+      background: var(--bg-page);
+      font-weight: 800;
+      font-size: 14.5px;
+      padding: 11px 12px;
+      border-top: 2px solid var(--border-medium);
+      border-bottom: none;
+      color: var(--corp-navy);
+    }
+
     .align-r {
       text-align: right;
       font-weight: 700;
@@ -1979,20 +1989,22 @@
       }
     }
 
-    /* ================= நிறுவனத் தர பிடிஎஃப் / அச்சு வடிவமைப்பு (Company-Level PDF) ================= */
+    /* ================= நிறுவனத் தர பிடிஎஃப் / அச்சு வடிவமைப்பு ================= */
     @page {
       size: A4 portrait;
-      margin: 6mm 8mm;
+      margin: 6mm 7mm;
     }
 
     @media print {
       html,
       body {
-        width: 100%;
-        height: auto;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
         background: #ffffff !important;
         padding: 0 !important;
         margin: 0 !important;
+        overflow: visible !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
@@ -2015,18 +2027,12 @@
         display: none !important;
       }
 
-      .app-shell {
-        display: block !important;
-        padding: 0 !important;
-      }
-
-      .main-wrap {
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-
+      .app-shell,
+      .main-wrap,
       .white-panel {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
         box-shadow: none !important;
         border: none !important;
         padding: 0 !important;
@@ -2034,33 +2040,33 @@
         border-radius: 0 !important;
       }
 
-      /* அச்சு முறை 1: தினசரி கணக்கு ஒரே பக்கம் நிறுவன அறிக்கை */
       body:not(.print-history-mode) #historyView {
         display: none !important;
       }
       body:not(.print-history-mode) #ledgerView {
         display: block !important;
+        width: 100% !important;
       }
 
-      /* அச்சு முறை 2: பரிவர்த்தனை வரலாறு தொகுப்பு அறிக்கை */
       body.print-history-mode #ledgerView {
         display: none !important;
       }
       body.print-history-mode #historyView {
         display: block !important;
+        width: 100% !important;
       }
 
-      /* நிறுவன லெட்டர்ஹெட் தலைப்பு */
       .print-only-voucher-top,
       body.print-history-mode .print-history-header {
         display: flex !important;
+        width: 100% !important;
         align-items: center;
         justify-content: space-between;
         border-top: 3px solid #1e3a8a;
         border-bottom: 2px solid #0f172a;
         background: #f8fafc !important;
-        padding: 7px 10px;
-        margin-bottom: 7px;
+        padding: 8px 12px;
+        margin-bottom: 8px;
       }
 
       .pv-left {
@@ -2121,28 +2127,29 @@
         color: #475569;
       }
 
-      /* நிறுவனச் சுருக்கப் பட்டை (வரவு பச்சை, செலவு சிவப்பு) */
       .print-exec-strip {
         display: grid !important;
+        width: 100% !important;
         grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
-        margin-bottom: 7px;
+        gap: 8px;
+        margin-bottom: 8px;
         page-break-inside: avoid;
         break-inside: avoid;
       }
 
       body.print-history-mode .print-history-summary {
         display: grid !important;
+        width: 100% !important;
         grid-template-columns: 1fr;
         gap: 6px;
-        margin-bottom: 7px;
+        margin-bottom: 8px;
         page-break-inside: avoid;
         break-inside: avoid;
       }
 
       .pe-box {
         border: 1.2px solid #cbd5e1;
-        padding: 4px 8px;
+        padding: 5px 10px;
         background: #ffffff !important;
       }
 
@@ -2163,33 +2170,35 @@
       }
 
       .pe-val {
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 800;
         margin-top: 1px;
       }
 
-      /* முதன்மை கணக்கு அட்டவணை - நிறுவனத் தர வடிவமைப்பு */
       .ledger-container {
+        width: 100% !important;
+        overflow: visible !important;
         border: 1.5px solid #0f172a !important;
         border-radius: 0 !important;
-        margin-bottom: 7px !important;
+        margin-bottom: 8px !important;
         page-break-inside: avoid;
         break-inside: avoid;
       }
 
       table.corp-ledger-table {
-        font-size: 11.5px !important;
+        width: 100% !important;
+        font-size: 12px !important;
       }
 
       table.corp-ledger-table th {
-        padding: 4.5px 8px !important;
-        font-size: 10.5px !important;
+        padding: 5px 8px !important;
+        font-size: 11px !important;
         border-bottom: 1.5px solid #0f172a !important;
         border-right: 1px solid #0f172a !important;
       }
 
       table.corp-ledger-table td {
-        padding: 3.5px 10px !important;
+        padding: 4.5px 10px !important;
         border-bottom: 1px solid #94a3b8 !important;
         border-right: 1px solid #0f172a !important;
       }
@@ -2213,7 +2222,7 @@
       .rs-symbol {
         position: static !important;
         margin-right: 3px !important;
-        font-size: 11.5px !important;
+        font-size: 12px !important;
       }
 
       .num-entry {
@@ -2224,7 +2233,7 @@
         min-height: 0 !important;
         height: auto !important;
         width: auto !important;
-        font-size: 11.5px !important;
+        font-size: 12px !important;
         text-align: right !important;
       }
 
@@ -2235,12 +2244,12 @@
         padding: 0 !important;
         min-height: 0 !important;
         height: auto !important;
-        font-size: 11.5px !important;
+        font-size: 12px !important;
         text-align: left !important;
       }
 
       .calc-val {
-        font-size: 11.5px !important;
+        font-size: 12px !important;
         padding: 0 !important;
       }
 
@@ -2269,20 +2278,20 @@
 
       .r-closing .c-label,
       .r-closing .calc-val {
-        font-size: 13.5px !important;
+        font-size: 14px !important;
         font-weight: 800 !important;
         color: #047857 !important;
       }
 
-      /* ரொக்கம் & யுபிஐ சரிபார்ப்பு பட்டை (உள்ளிடப்பட்டிருந்தால் மட்டும் அச்சில் தோன்றும்) */
       .print-cash-upi-bar.has-values {
         display: flex !important;
+        width: 100% !important;
         justify-content: space-between;
         align-items: center;
         border: 1px solid #a7f3d0;
         background: #ecfdf5 !important;
-        padding: 4px 10px;
-        margin-bottom: 7px;
+        padding: 5px 10px;
+        margin-bottom: 8px;
         font-size: 11px;
         font-weight: 700;
         color: #065f46;
@@ -2292,34 +2301,40 @@
 
       .two-col-grid {
         display: grid !important;
+        width: 100% !important;
         grid-template-columns: 1fr 1fr !important;
         gap: 10px !important;
         align-items: start !important;
-        margin-bottom: 7px !important;
+        margin-bottom: 8px !important;
         page-break-inside: avoid;
         break-inside: avoid;
       }
 
       .sub-ledger-card {
+        width: 100% !important;
         border: 1.5px solid #0f172a !important;
         border-radius: 0 !important;
       }
 
       .sub-ledger-top {
         border-bottom: 1px solid #0f172a !important;
-        padding: 4px 8px !important;
+        padding: 5px 8px !important;
       }
 
       .sub-title-wrap {
-        font-size: 11.5px !important;
+        font-size: 12px !important;
       }
 
       .pill-total {
         display: none !important;
       }
 
+      table.sub-items-tbl {
+        width: 100% !important;
+      }
+
       table.sub-items-tbl td {
-        padding: 2.5px 8px !important;
+        padding: 3px 8px !important;
         border-bottom: 1px solid #cbd5e1 !important;
       }
 
@@ -2334,7 +2349,7 @@
         padding: 0 !important;
         min-height: 0 !important;
         height: auto !important;
-        font-size: 11px !important;
+        font-size: 11.5px !important;
       }
 
       .sub-foot-total {
@@ -2342,46 +2357,83 @@
       }
 
       .sub-foot-total td {
-        padding: 4px 8px !important;
-        font-size: 11.5px !important;
+        padding: 5px 8px !important;
+        font-size: 12px !important;
       }
 
       .remarks-card {
+        width: 100% !important;
         background: #ffffff !important;
         border: 1px solid #0f172a !important;
         border-radius: 0 !important;
-        padding: 4px 8px !important;
+        padding: 5px 10px !important;
         margin-bottom: 0 !important;
       }
 
       .remarks-card label {
-        font-size: 10px !important;
-        margin-bottom: 1px !important;
+        font-size: 10.5px !important;
+        margin-bottom: 2px !important;
       }
 
       .remarks-input {
         border: none !important;
         padding: 0 !important;
-        font-size: 11px !important;
+        font-size: 11.5px !important;
       }
 
-      /* வரலாறு அறிக்கை அட்டவணை அச்சு */
+      /* வரலாறு அறிக்கை அட்டவணை அச்சு — முழுப் பக்க அகலம் & அனைத்து நெடுவரிசைகள் */
       body.print-history-mode .tbl-responsive {
+        width: 100% !important;
+        overflow: visible !important;
         border: 1.5px solid #0f172a !important;
         border-radius: 0 !important;
       }
 
-      body.print-history-mode table.corp-table th,
+      body.print-history-mode table.corp-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-size: 10.5px !important;
+      }
+
+      body.print-history-mode table.corp-table thead {
+        display: table-header-group;
+      }
+
+      body.print-history-mode table.corp-table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      body.print-history-mode table.corp-table th {
+        padding: 5px 5px !important;
+        font-size: 10px !important;
+        white-space: normal !important;
+        line-height: 1.25 !important;
+        border-bottom: 1.5px solid #0f172a !important;
+        border-right: 1px solid #94a3b8 !important;
+      }
+
       body.print-history-mode table.corp-table td {
-        padding: 4px 6px !important;
-        font-size: 11px !important;
+        padding: 4.5px 5px !important;
+        font-size: 10.5px !important;
         border-bottom: 1px solid #cbd5e1 !important;
         border-right: 1px solid #e2e8f0 !important;
       }
 
-      body.print-history-mode table.corp-table th:last-child,
-      body.print-history-mode table.corp-table td:last-child {
-        display: none !important;
+      body.print-history-mode table.corp-table tfoot td {
+        background: #f1f5f9 !important;
+        border-top: 1.5px solid #0f172a !important;
+        border-bottom: none !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        padding: 5px 5px !important;
+      }
+
+      body.print-history-mode .hist-filter-summary-bar {
+        border-radius: 0 !important;
+        padding: 5px 8px !important;
+        margin-bottom: 6px !important;
+        font-size: 11px !important;
       }
     }
   </style>
@@ -2400,7 +2452,7 @@
       </div>
 
       <div class="login-logo-wrap">
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ஸ்ரீ லட்சுமி பைனான்ஸ் இலச்சினை">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ஸ்ரீ லெட்சுமி பைனான்ஸ் இலச்சினை">
           <rect x="2" y="2" width="60" height="60" rx="16" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="2.5"/>
           <circle cx="32" cy="32" r="21" fill="#FFFFFF" stroke="#D97706" stroke-width="2"/>
           <path d="M32 14C28.5 19.5 28.5 24 32 27.5C35.5 24 35.5 19.5 32 14Z" fill="#D97706"/>
@@ -2410,7 +2462,7 @@
         </svg>
       </div>
 
-      <h1 class="login-brand-title" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</h1>
+      <h1 class="login-brand-title" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</h1>
       <p class="login-brand-sub" id="loginSubtitleText" data-i18n="loginSub">தினசரி நிதி கணக்குப் பதிவேடு — உள்நுழைவு</p>
 
       <div id="loginErrorMsg" class="login-error-msg"></div>
@@ -2466,7 +2518,7 @@
           </div>
           <div class="brand-texts">
             <div class="auspicious-line" data-i18n="sacred">உ • சிவமயம்</div>
-            <h1 class="header-company-name" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</h1>
+            <h1 class="header-company-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</h1>
           </div>
         </div>
 
@@ -2523,7 +2575,7 @@
               </svg>
               <div>
                 <div class="pv-sacred" data-i18n="sacred">உ • சிவமயம்</div>
-                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</div>
+                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
                 <div class="pv-office-sub" id="printOfficeTagline"></div>
               </div>
             </div>
@@ -2856,7 +2908,7 @@
               </svg>
               <div>
                 <div class="pv-sacred" data-i18n="sacred">உ • சிவமயம்</div>
-                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</div>
+                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
                 <div class="pv-office-sub" id="printHistOfficeTagline"></div>
               </div>
             </div>
@@ -2924,10 +2976,11 @@
                     <th class="align-r exp-label" data-i18n="rowExpense">செலவு</th>
                     <th class="align-r exp-label" data-i18n="thPersonDebit">நபர் பற்று</th>
                     <th class="align-r inc-label" data-i18n="rowClosing">இருப்பு</th>
-                    <th style="text-align: center;" data-i18n="thAction">செயல்</th>
+                    <th class="no-print-col" style="text-align: center;" data-i18n="thAction">செயல்</th>
                   </tr>
                 </thead>
                 <tbody id="histDailyBody"></tbody>
+                <tfoot id="histDailyFoot"></tfoot>
               </table>
             </div>
           </div>
@@ -2948,6 +3001,7 @@
                   </tr>
                 </thead>
                 <tbody id="histItemsBody"></tbody>
+                <tfoot id="histItemsFoot"></tfoot>
               </table>
             </div>
           </div>
@@ -3183,7 +3237,7 @@ CREATE POLICY "Valid ledger rows access"
     const I18N = {
       ta: {
         sacred: "உ • சிவமயம்",
-        brandName: "ஸ்ரீ லட்சுமி பைனான்ஸ்",
+        brandName: "ஸ்ரீ லெட்சுமி பைனான்ஸ்",
         loginSub: "தினசரி நிதி கணக்குப் பதிவேடு — உள்நுழைவு",
         userNameLbl: "பயனர் பெயர்",
         userNamePh: "உங்கள் பெயரை உள்ளிடவும்",
@@ -3280,6 +3334,12 @@ CREATE POLICY "Valid ledger rows access"
         noCustomCats: "தனிப்பயன் வகைகள் எதுவும் சேர்க்கப்படவில்லை",
         kwPrefix: "சொற்கள்:",
         filterTotalLbl: "தேர்ந்தெடுக்கப்பட்ட வகை மொத்தம்",
+        histTotalRowLbl: "மொத்தம்",
+        histDaysUnit: "நாட்கள்",
+        histItemsUnit: "பதிவுகள்",
+        histAllIncomeTotalLbl: "மொத்த வரவு",
+        histAllExpenseTotalLbl: "மொத்த செலவு",
+        histGrandAmountLbl: "மொத்தத் தொகை",
         btnCsv: "📥 எக்செல் பதிவிறக்கம்",
         tabDailyHist: "நாள் வாரியான கணக்கு",
         tabItemHist: "அனைத்து வரவு-செலவு பட்டியல்",
@@ -3429,6 +3489,12 @@ CREATE POLICY "Valid ledger rows access"
         noCustomCats: "No custom categories added yet",
         kwPrefix: "Keywords:",
         filterTotalLbl: "Selected Category Total",
+        histTotalRowLbl: "Total",
+        histDaysUnit: "Days",
+        histItemsUnit: "Items",
+        histAllIncomeTotalLbl: "Total Income",
+        histAllExpenseTotalLbl: "Total Expense",
+        histGrandAmountLbl: "Total Amount",
         btnCsv: "📥 Export Excel (CSV)",
         tabDailyHist: "Daily Ledger Summary",
         tabItemHist: "All Income & Expense Items",
@@ -5244,16 +5310,26 @@ CREATE POLICY "Valid ledger rows access"
         return txt.includes(q);
       });
 
-      // வரலாறு பிடிஎஃப் அறிக்கைக்கான மொத்த வசூல் கணக்கீடு
+      // வரலாறு கணக்கு மொத்தக் கணக்கீடு (நாள் வாரியான அட்டவணை & பிடிஎஃப் அறிக்கை)
       let totalCol = 0;
+      let totalAdappu = 0;
+      let totalExp = 0;
+      let totalPerson = 0;
       finalDates.forEach(dt => {
         const n = computeNumbers(db[dt]);
         totalCol += n.collection;
+        totalAdappu += n.adappu;
+        totalExp += n.expense;
+        totalPerson += n.person;
       });
+      const latestClosing = finalDates.length > 0 ? computeNumbers(db[finalDates[0]]).closing : 0;
+      const earliestOpening = finalDates.length > 0 ? computeNumbers(db[finalDates[finalDates.length - 1]]).opening : 0;
       document.getElementById("printHistTotalCol").textContent = `₹ ${fmt(totalCol)}`;
 
+      const dFoot = document.getElementById("histDailyFoot");
       if (finalDates.length === 0) {
         dBody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:28px; color:var(--text-muted);">${esc(t("noRecords"))}</td></tr>`;
+        if (dFoot) dFoot.innerHTML = "";
       } else {
         finalDates.forEach(dt => {
           const r = db[dt];
@@ -5268,7 +5344,7 @@ CREATE POLICY "Valid ledger rows access"
             <td class="align-r exp-text">${fmt(n.expense)}</td>
             <td class="align-r exp-text">${esc(r.personLabel || "ராஜேஷ்")}: ${fmt(n.person)}</td>
             <td class="align-r ${closingCls}" style="font-size:15px;">${fmt(n.closing)}</td>
-            <td style="text-align:center; white-space:nowrap;">
+            <td class="no-print-col" style="text-align:center; white-space:nowrap;">
               <button type="button" class="btn btn-white" style="padding:4px 8px; min-height:30px; font-size:12px;" onclick="openRecordModal('${dt}')">${esc(t("btnView"))}</button>
               <button type="button" class="btn btn-primary" style="padding:4px 8px; min-height:30px; font-size:12px;" onclick="loadDateRecord('${dt}')">${esc(t("btnEdit"))}</button>
               <button type="button" class="btn btn-rose-outline" style="padding:4px 8px; min-height:30px; font-size:12px;" onclick="deleteDateRecord('${dt}')">${esc(t("btnDelete"))}</button>
@@ -5276,6 +5352,22 @@ CREATE POLICY "Valid ledger rows access"
           `;
           dBody.appendChild(tr);
         });
+
+        if (dFoot) {
+          const latestCls = latestClosing < 0 ? "exp-text" : "inc-text";
+          dFoot.innerHTML = `
+            <tr>
+              <td style="white-space:nowrap;">${esc(t("histTotalRowLbl"))} (${finalDates.length} ${esc(t("histDaysUnit"))})</td>
+              <td class="align-r inc-text">₹ ${fmt(earliestOpening)}</td>
+              <td class="align-r inc-text">₹ ${fmt(totalCol)}</td>
+              <td class="align-r exp-text">₹ ${fmt(totalAdappu)}</td>
+              <td class="align-r exp-text">₹ ${fmt(totalExp)}</td>
+              <td class="align-r exp-text">₹ ${fmt(totalPerson)}</td>
+              <td class="align-r ${latestCls}">₹ ${fmt(latestClosing)}</td>
+              <td class="no-print-col"></td>
+            </tr>
+          `;
+        }
       }
 
       const iBody = document.getElementById("histItemsBody");
@@ -5377,27 +5469,38 @@ CREATE POLICY "Valid ledger rows access"
       });
 
       const sumBar = document.getElementById("histFilteredSummaryBar");
+      const iFoot = document.getElementById("histItemsFoot");
+      const totalItemsInc = filteredList.reduce((acc, it) => acc + (it.isIncome ? (Number(it.amt) || 0) : 0), 0);
+      const totalItemsExp = filteredList.reduce((acc, it) => acc + (!it.isIncome ? (Number(it.amt) || 0) : 0), 0);
+      const filteredSum = filteredList.reduce((acc, it) => acc + (Number(it.amt) || 0), 0);
+
       if (sumBar) {
-        if (tFilter !== "all") {
+        if (filteredList.length === 0) {
+          sumBar.style.display = "none";
+        } else if (tFilter !== "all") {
           const typeSel = document.getElementById("histTypeFilter");
           const chosenLabel = typeSel && typeSel.selectedIndex >= 0
             ? typeSel.options[typeSel.selectedIndex].text
             : "";
-          const filteredSum = filteredList.reduce((acc, it) => acc + (Number(it.amt) || 0), 0);
           const customObj = isCustomFilter ? customCats.find(c => c.id === targetCustomId) : null;
           const isIncBar = customObj ? customObj.flow === "income" : tFilter === "collection";
 
           sumBar.style.display = "flex";
           sumBar.className = "hist-filter-summary-bar " + (isIncBar ? "inc-bar" : "exp-bar");
-          document.getElementById("histFilteredCatLabel").textContent = `${chosenLabel} (${filteredList.length})`;
+          document.getElementById("histFilteredCatLabel").textContent = `${chosenLabel} (${filteredList.length} ${t("histItemsUnit")})`;
           document.getElementById("histFilteredCatTotal").textContent = `₹ ${fmt(filteredSum)}`;
         } else {
-          sumBar.style.display = "none";
+          sumBar.style.display = "flex";
+          sumBar.className = "hist-filter-summary-bar";
+          document.getElementById("histFilteredCatLabel").innerHTML =
+            `<span class="inc-text">${esc(t("histAllIncomeTotalLbl"))}: ₹ ${fmt(totalItemsInc)}</span> &nbsp;|&nbsp; <span class="exp-text">${esc(t("histAllExpenseTotalLbl"))}: ₹ ${fmt(totalItemsExp)}</span>`;
+          document.getElementById("histFilteredCatTotal").textContent = `${t("histGrandAmountLbl")}: ₹ ${fmt(filteredSum)}`;
         }
       }
 
       if (filteredList.length === 0) {
         iBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:28px; color:var(--text-muted);">${esc(t("noTxns"))}</td></tr>`;
+        if (iFoot) iFoot.innerHTML = "";
       } else {
         filteredList.forEach(it => {
           const badgeCls = it.isIncome ? "sb-in" : "sb-out";
@@ -5411,6 +5514,19 @@ CREATE POLICY "Valid ledger rows access"
           `;
           iBody.appendChild(tr);
         });
+
+        if (iFoot) {
+          const customObj = isCustomFilter ? customCats.find(c => c.id === targetCustomId) : null;
+          const footAmtCls = tFilter === "all"
+            ? ""
+            : ((customObj ? customObj.flow === "income" : tFilter === "collection") ? "inc-text" : "exp-text");
+          iFoot.innerHTML = `
+            <tr>
+              <td colspan="3" style="text-align:right;">${esc(t("histGrandAmountLbl"))} (${filteredList.length} ${esc(t("histItemsUnit"))}):</td>
+              <td class="align-r ${footAmtCls}">₹ ${fmt(filteredSum)}</td>
+            </tr>
+          `;
+        }
       }
     }
 
