@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ta">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>ஸ்ரீ லெட்சுமி பைனான்ஸ் | Sri Lakshmi Finance</title>
+  <title>ஸ்ரீ லட்சுமி பைனான்ஸ் | Sri Lakshmi Finance</title>
   <style>
     :root {
       --bg-page: #f8fafc;
@@ -1453,6 +1452,35 @@
       min-height: 38px;
     }
 
+    .hist-date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border-medium);
+      border-radius: var(--radius-sm);
+      padding: 3px 8px 3px 10px;
+      background: #ffffff;
+      min-height: 38px;
+    }
+
+    .hist-date-pill label {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--corp-blue);
+      white-space: nowrap;
+    }
+
+    .hist-date-pill input[type="date"] {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--corp-navy);
+      outline: none;
+      min-height: 30px;
+    }
+
     .pill-switcher {
       display: inline-flex;
       background: var(--bg-page);
@@ -2372,7 +2400,7 @@
       </div>
 
       <div class="login-logo-wrap">
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ஸ்ரீ லெட்சுமி பைனான்ஸ் இலச்சினை">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ஸ்ரீ லட்சுமி பைனான்ஸ் இலச்சினை">
           <rect x="2" y="2" width="60" height="60" rx="16" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="2.5"/>
           <circle cx="32" cy="32" r="21" fill="#FFFFFF" stroke="#D97706" stroke-width="2"/>
           <path d="M32 14C28.5 19.5 28.5 24 32 27.5C35.5 24 35.5 19.5 32 14Z" fill="#D97706"/>
@@ -2382,7 +2410,7 @@
         </svg>
       </div>
 
-      <h1 class="login-brand-title" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</h1>
+      <h1 class="login-brand-title" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</h1>
       <p class="login-brand-sub" id="loginSubtitleText" data-i18n="loginSub">தினசரி நிதி கணக்குப் பதிவேடு — உள்நுழைவு</p>
 
       <div id="loginErrorMsg" class="login-error-msg"></div>
@@ -2438,7 +2466,7 @@
           </div>
           <div class="brand-texts">
             <div class="auspicious-line" data-i18n="sacred">உ • சிவமயம்</div>
-            <h1 class="header-company-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</h1>
+            <h1 class="header-company-name" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</h1>
           </div>
         </div>
 
@@ -2495,7 +2523,7 @@
               </svg>
               <div>
                 <div class="pv-sacred" data-i18n="sacred">உ • சிவமயம்</div>
-                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
+                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</div>
                 <div class="pv-office-sub" id="printOfficeTagline"></div>
               </div>
             </div>
@@ -2828,7 +2856,7 @@
               </svg>
               <div>
                 <div class="pv-sacred" data-i18n="sacred">உ • சிவமயம்</div>
-                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
+                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லட்சுமி பைனான்ஸ்</div>
                 <div class="pv-office-sub" id="printHistOfficeTagline"></div>
               </div>
             </div>
@@ -2849,17 +2877,24 @@
 
           <div class="history-filter-row">
             <div class="filter-controls">
-              <input type="text" id="histSearch" class="f-input" style="flex: 1; min-width: 170px;"
+              <input type="text" id="histSearch" class="f-input" style="flex: 1; min-width: 160px;"
                 data-i18n-ph="searchPh" placeholder="தேதி, பெயர் அல்லது செலவு தேடுக..." oninput="renderHistory()" />
-              <select id="histYearFilter" class="f-input" onchange="renderHistory()">
+              <div class="hist-date-pill">
+                <label for="histDateFilter" data-i18n="particularDateLbl">குறிப்பிட்ட தேதி:</label>
+                <input type="date" id="histDateFilter" onchange="onHistDateFilterChange()" />
+              </div>
+              <select id="histYearFilter" class="f-input" onchange="onHistYearFilterChange()">
                 <option value="">அனைத்து ஆண்டுகளும்</option>
               </select>
-              <input type="month" id="histMonthFilter" class="f-input" onchange="renderHistory()" />
+              <input type="month" id="histMonthFilter" class="f-input" onchange="onHistMonthFilterChange()" />
               <select id="histTypeFilter" class="f-input" onchange="onHistTypeFilterChange()">
                 <option value="all">அனைத்து வகைகளும்</option>
               </select>
               <button type="button" class="btn btn-white" style="padding: 6px 11px; min-height: 38px;" onclick="openCustomCatModal()" data-i18n="btnManageCats">
                 ⚙️ வகை சேர்/நீக்கு
+              </button>
+              <button type="button" id="btnClearHistFilters" class="btn btn-rose-outline" style="display: none; padding: 6px 10px; min-height: 38px;" onclick="clearHistoryFilters()" data-i18n="btnClearFilters">
+                ✕ நீக்கு
               </button>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -3148,7 +3183,7 @@ CREATE POLICY "Valid ledger rows access"
     const I18N = {
       ta: {
         sacred: "உ • சிவமயம்",
-        brandName: "ஸ்ரீ லெட்சுமி பைனான்ஸ்",
+        brandName: "ஸ்ரீ லட்சுமி பைனான்ஸ்",
         loginSub: "தினசரி நிதி கணக்குப் பதிவேடு — உள்நுழைவு",
         userNameLbl: "பயனர் பெயர்",
         userNamePh: "உங்கள் பெயரை உள்ளிடவும்",
@@ -3220,6 +3255,8 @@ CREATE POLICY "Valid ledger rows access"
         tallyExcessPrefix: "⚠️ கணக்கை விட அதிகமாக உள்ளது: +₹ ",
         tallyShortPrefix: "❗ கணக்கை விடக் குறைவாக உள்ளது: ₹ ",
         searchPh: "தேதி, பெயர் அல்லது செலவு தேடுக...",
+        particularDateLbl: "குறிப்பிட்ட தேதி:",
+        btnClearFilters: "✕ நீக்கு",
         allYearsOpt: "அனைத்து ஆண்டுகளும்",
         yearSuffix: " ஆண்டு",
         optAllTypes: "அனைத்து வகைகளும்",
@@ -3367,6 +3404,8 @@ CREATE POLICY "Valid ledger rows access"
         tallyExcessPrefix: "⚠️ Excess amount: +₹ ",
         tallyShortPrefix: "❗ Shortage amount: ₹ ",
         searchPh: "Search date, name or expense...",
+        particularDateLbl: "Date:",
+        btnClearFilters: "✕ Clear",
         allYearsOpt: "All Years",
         yearSuffix: " Year",
         optAllTypes: "All Categories",
@@ -4667,10 +4706,13 @@ CREATE POLICY "Valid ledger rows access"
       applyOfficeTaglineToPrint();
       renderHistory();
 
+      const dFilter = document.getElementById("histDateFilter").value;
       const yFilter = document.getElementById("histYearFilter").value;
       const mFilter = document.getElementById("histMonthFilter").value;
       let scopeLabel = currentLang === "en" ? "All Recorded Dates" : "அனைத்துப் பதிவு செய்யப்பட்ட நாட்கள்";
-      if (mFilter) {
+      if (dFilter && isValidISODate(dFilter)) {
+        scopeLabel = `${t("dateLbl")}: ${fmtDateTA(dFilter)}`;
+      } else if (mFilter) {
         scopeLabel = `${currentLang === "en" ? "Month" : "மாதம்"}: ${mFilter}`;
       } else if (yFilter) {
         scopeLabel = `${currentLang === "en" ? "Year" : "ஆண்டு"}: ${yFilter}`;
@@ -5081,6 +5123,49 @@ CREATE POLICY "Valid ledger rows access"
       sel.value = validValues.has(prevVal) ? prevVal : "all";
     }
 
+    function onHistDateFilterChange() {
+      const dInp = document.getElementById("histDateFilter");
+      if (dInp && dInp.value) {
+        const yInp = document.getElementById("histYearFilter");
+        const mInp = document.getElementById("histMonthFilter");
+        if (yInp) yInp.value = "";
+        if (mInp) mInp.value = "";
+      }
+      renderHistory();
+    }
+
+    function onHistYearFilterChange() {
+      const yInp = document.getElementById("histYearFilter");
+      if (yInp && yInp.value) {
+        const dInp = document.getElementById("histDateFilter");
+        if (dInp) dInp.value = "";
+      }
+      renderHistory();
+    }
+
+    function onHistMonthFilterChange() {
+      const mInp = document.getElementById("histMonthFilter");
+      if (mInp && mInp.value) {
+        const dInp = document.getElementById("histDateFilter");
+        if (dInp) dInp.value = "";
+      }
+      renderHistory();
+    }
+
+    function clearHistoryFilters() {
+      const sInp = document.getElementById("histSearch");
+      const dInp = document.getElementById("histDateFilter");
+      const yInp = document.getElementById("histYearFilter");
+      const mInp = document.getElementById("histMonthFilter");
+      const tInp = document.getElementById("histTypeFilter");
+      if (sInp) sInp.value = "";
+      if (dInp) dInp.value = "";
+      if (yInp) yInp.value = "";
+      if (mInp) mInp.value = "";
+      if (tInp) tInp.value = "all";
+      renderHistory();
+    }
+
     function onHistTypeFilterChange() {
       const tFilter = document.getElementById("histTypeFilter").value;
       if (tFilter !== "all" && histMode !== "items") {
@@ -5124,11 +5209,19 @@ CREATE POLICY "Valid ledger rows access"
       refreshYearDropdown(allDates);
 
       const q = (document.getElementById("histSearch").value || "").trim().toLowerCase();
+      const dFilter = (document.getElementById("histDateFilter").value || "").trim();
       const yFilter = document.getElementById("histYearFilter").value;
       const mFilter = document.getElementById("histMonthFilter").value;
       const tFilter = document.getElementById("histTypeFilter").value;
 
+      const clearBtn = document.getElementById("btnClearHistFilters");
+      if (clearBtn) {
+        const hasAnyFilter = Boolean(q || dFilter || yFilter || mFilter || (tFilter && tFilter !== "all"));
+        clearBtn.style.display = hasAnyFilter ? "inline-flex" : "none";
+      }
+
       const scopedDates = allDates.filter(dt => {
+        if (dFilter && isValidISODate(dFilter) && dt !== dFilter) return false;
         if (yFilter && !dt.startsWith(yFilter)) return false;
         if (mFilter && !dt.startsWith(mFilter)) return false;
         return true;
