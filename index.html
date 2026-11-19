@@ -715,8 +715,7 @@
     .print-only-voucher-top,
     .print-exec-strip,
     .print-cash-upi-bar,
-    .print-history-header,
-    .print-history-summary {
+    .print-history-header {
       display: none;
     }
 
@@ -864,6 +863,19 @@
       background: #ffffff;
       min-height: 40px;
       transition: all 0.15s ease;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      appearance: none;
+      margin: 0;
+      display: none;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
     }
 
     .num-entry.inc-input {
@@ -1591,6 +1603,90 @@
       padding: 20px;
     }
 
+    .settings-hub-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .settings-hub-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .settings-hub-card:hover {
+      border-color: var(--corp-blue);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .settings-hub-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .settings-hub-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--corp-blue-soft);
+      color: var(--corp-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+      flex-shrink: 0;
+    }
+
+    .settings-hub-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--corp-navy);
+      line-height: 1.3;
+    }
+
+    .settings-hub-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .settings-hub-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-light);
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--corp-blue);
+    }
+
+    .settings-detail-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
     .setting-card.full-span {
       grid-column: span 2;
       border: 1.5px solid #bfdbfe;
@@ -1627,6 +1723,34 @@
       font-size: 12.5px;
       font-weight: 700;
       color: var(--text-sub);
+    }
+
+    .brand-logo-custom-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      margin-bottom: 14px;
+    }
+
+    .brand-logo-preview-img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1px solid var(--border-medium);
+      padding: 3px;
+      flex-shrink: 0;
+    }
+
+    .custom-brand-img {
+      object-fit: contain;
+      border-radius: 8px;
+      background: #ffffff;
     }
 
     /* ================= சாளரங்கள் (விவரம் & கால்குலேட்டர்) ================= */
@@ -1849,6 +1973,287 @@
       gap: 6px;
     }
 
+    /* ================= ரசீது சாளரம் & வடிவமைப்பு (Receipt Modal) ================= */
+    .receipt-controls-box {
+      background: var(--bg-page);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .receipt-ctrl-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .receipt-ctrl-grid .f-input {
+      width: 100%;
+      font-size: 13px;
+      padding: 7px 10px;
+      min-height: 36px;
+    }
+
+    .receipt-paper {
+      background: #ffffff;
+      border: 1.5px solid var(--corp-navy);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .rcp-header {
+      text-align: center;
+      border-bottom: 2px solid var(--corp-navy);
+      padding-bottom: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .rcp-line-u {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--corp-gold);
+      line-height: 1.2;
+    }
+
+    .rcp-line-sivamayam {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--corp-gold);
+      letter-spacing: 0.8px;
+      line-height: 1.25;
+    }
+
+    .rcp-line-logo {
+      margin: 4px 0 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rcp-brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--corp-navy);
+      line-height: 1.25;
+      letter-spacing: 0.2px;
+    }
+
+    .rcp-office-sub {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-sub);
+      margin-top: 1px;
+    }
+
+    .rcp-toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      padding: 4px 2px;
+    }
+
+    .rcp-chk-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--corp-navy);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .rcp-chk-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--corp-blue);
+      cursor: pointer;
+    }
+
+    .rcp-interest-manual-box {
+      display: none;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 8px;
+      padding: 8px;
+      background: #ffffff;
+      border: 1px dashed var(--corp-gold);
+      border-radius: 8px;
+    }
+
+    .rcp-interest-manual-box.open {
+      display: grid;
+    }
+
+    .rcp-weekly-manual-box {
+      display: none;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 8px;
+      background: #ffffff;
+      border: 1px dashed var(--corp-blue);
+      border-radius: 8px;
+    }
+
+    .rcp-weekly-manual-box.open {
+      display: grid;
+    }
+
+    .rcp-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      background: var(--corp-blue-soft);
+      border: 1px solid #dbeafe;
+      border-radius: 8px;
+      padding: 7px 10px;
+      margin-bottom: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--corp-navy);
+    }
+
+    .rcp-badge {
+      background: var(--corp-blue);
+      color: #ffffff;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .rcp-cust-strip {
+      display: none;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      border: 1px dashed var(--border-medium);
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--corp-navy);
+    }
+
+    .days-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--corp-gold-soft);
+      color: var(--corp-gold);
+      border: 1px solid #fde68a;
+      font-size: 11.5px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .rcp-note-box {
+      display: none;
+      margin-top: 10px;
+      padding: 7px 10px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .rcp-sign-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 22px;
+      padding-top: 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .rcp-sign-box {
+      text-align: center;
+      min-width: 135px;
+      border-top: 1px solid var(--border-medium);
+      padding-top: 4px;
+    }
+
+    .rcp-actions-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    /* ================= பழைய தேதி பூட்டு & தனிப்பயன் உறுதிப்படுத்தல் சாளரம் ================= */
+    .past-date-lock-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      border-radius: var(--radius-md);
+      background: var(--corp-gold-soft);
+      border: 1.5px solid #f59e0b;
+      color: var(--corp-gold);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .past-date-lock-banner.active {
+      display: flex;
+    }
+
+    .past-date-lock-banner.unlocked {
+      background: var(--income-green-bg);
+      border-color: var(--income-green);
+      color: var(--income-green-dark);
+    }
+
+    .ledger-locked-active .num-entry,
+    .ledger-locked-active .txt-entry,
+    .ledger-locked-active .sub-name-inp,
+    .ledger-locked-active .sub-amt-inp,
+    .ledger-locked-active .remarks-input,
+    .ledger-locked-active .qty-box,
+    .ledger-locked-active .upi-amt-input {
+      background: #f8fafc !important;
+      opacity: 0.85;
+      cursor: not-allowed;
+    }
+
+    .confirm-modal-window {
+      max-width: 420px;
+    }
+
+    .confirm-modal-msg {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--corp-navy);
+      line-height: 1.55;
+      margin-bottom: 18px;
+      white-space: pre-line;
+    }
+
+    .confirm-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
     /* அறிவிப்புப் பட்டை */
     .toast-bar {
       position: fixed;
@@ -1889,17 +2294,45 @@
     }
 
     @media (max-width: 768px) {
+      html,
+      body {
+        overflow-x: hidden;
+      }
+
       .corp-header-inner {
-        padding: 10px 12px;
+        padding: 8px 10px;
+        gap: 6px;
+      }
+
+      .header-brand {
+        gap: 7px;
       }
 
       .logo-frame {
-        width: 38px;
-        height: 38px;
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+      }
+
+      .auspicious-line {
+        font-size: 9.5px;
       }
 
       .header-company-name {
-        font-size: 15.5px;
+        font-size: 13.5px;
+      }
+
+      .header-actions {
+        gap: 5px;
+      }
+
+      .lang-opt-btn {
+        padding: 3px 7px;
+        font-size: 10.5px;
+      }
+
+      .db-status-pill {
+        padding: 5px 7px;
       }
 
       .db-status-pill span.db-txt {
@@ -1907,70 +2340,143 @@
       }
 
       .btn-header-logout {
-        padding: 6px 9px;
-        font-size: 12px;
+        padding: 6px 8px;
+        font-size: 11.5px;
+        border-radius: 8px;
       }
 
       .main-wrap {
-        margin-top: 12px;
-        padding: 0 12px;
+        margin-top: 10px;
+        padding: 0 10px;
       }
 
       .white-panel {
-        padding: 14px 12px;
-        border-radius: 16px;
+        padding: 12px 10px;
+        border-radius: 14px;
       }
 
       .panel-toolbar {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
+        gap: 8px;
+        padding-bottom: 12px;
+        margin-bottom: 14px;
       }
 
       .date-selector-pill {
         justify-content: space-between;
+        width: 100%;
+      }
+
+      .date-selector-pill input[type="date"] {
+        font-size: 13px;
+        padding: 5px 8px;
       }
 
       .toolbar-btns {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 6px;
       }
 
       .toolbar-btns .btn {
         padding: 8px 6px;
         font-size: 12px;
+        min-height: 36px;
       }
 
       table.corp-ledger-table {
-        font-size: 14px;
+        font-size: 13px;
+      }
+
+      table.corp-ledger-table th {
+        padding: 8px 5px;
+        font-size: 10.5px;
       }
 
       table.corp-ledger-table td {
-        padding: 7px 6px;
+        padding: 6px 5px;
+      }
+
+      .c-label {
+        width: 34%;
+        font-size: 12.5px;
+      }
+
+      .c-main {
+        width: 36%;
+      }
+
+      .c-side {
+        width: 30%;
       }
 
       .amt-field-box {
-        max-width: 132px;
+        max-width: 100%;
+      }
+
+      .rs-symbol {
+        left: 6px;
+        font-size: 11.5px;
       }
 
       .num-entry {
-        font-size: 15px;
-        padding: 6px 6px 6px 20px;
+        font-size: 13.5px;
+        padding: 6px 6px 6px 16px;
+        min-height: 36px;
+      }
+
+      .txt-entry {
+        font-size: 12.5px;
+        padding: 5px 5px;
+        min-height: 34px;
       }
 
       .calc-val {
-        font-size: 15px;
+        font-size: 13.5px;
+        padding: 2px 4px;
+      }
+
+      .r-closing .c-label {
+        font-size: 14.5px;
       }
 
       .r-closing .calc-val {
-        font-size: 18px;
+        font-size: 16px;
       }
 
       .two-col-grid,
       .denom-layout,
-      .settings-grid {
+      .settings-grid,
+      .settings-hub-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .sub-amt-inp {
+        width: 88px;
+        font-size: 13px;
+        padding: 6px 6px;
+      }
+
+      .sub-name-inp {
+        font-size: 13px;
+        padding: 6px 7px;
+      }
+
+      .receipt-ctrl-grid,
+      .rcp-weekly-manual-box,
+      .rcp-interest-manual-box {
+        grid-template-columns: 1fr;
+      }
+
+      .rcp-actions-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-window {
+        padding: 14px 14px;
+        max-height: 90vh;
       }
 
       .setting-card.full-span {
@@ -1983,8 +2489,8 @@
 
       .toast-bar {
         bottom: 78px;
-        left: 14px;
-        right: 14px;
+        left: 12px;
+        right: 12px;
         text-align: center;
       }
     }
@@ -2059,34 +2565,45 @@
       .print-only-voucher-top,
       body.print-history-mode .print-history-header {
         display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
         width: 100% !important;
-        align-items: center;
-        justify-content: space-between;
         border-top: 3px solid #1e3a8a;
         border-bottom: 2px solid #0f172a;
         background: #f8fafc !important;
-        padding: 8px 12px;
-        margin-bottom: 8px;
+        padding: 6px 10px 7px;
+        margin-bottom: 7px;
+        gap: 2px;
       }
 
-      .pv-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .pv-sacred {
-        font-size: 10.5px;
+      .pv-line-u {
+        font-size: 12.5px;
         font-weight: 800;
         color: #b45309;
-        letter-spacing: 0.4px;
+        line-height: 1.15;
+      }
+
+      .pv-line-sivamayam {
+        font-size: 11px;
+        font-weight: 800;
+        color: #b45309;
+        letter-spacing: 0.7px;
+        line-height: 1.2;
+      }
+
+      .pv-line-logo {
+        margin: 2px 0 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .pv-name {
         font-size: 18px;
         font-weight: 800;
         color: #0f172a;
-        line-height: 1.15;
+        line-height: 1.2;
       }
 
       .pv-office-sub {
@@ -2096,18 +2613,21 @@
         margin-top: 1px;
       }
 
-      .pv-right {
-        text-align: right;
+      .pv-meta-bar {
+        width: 100%;
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 2px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-top: 5px;
+        padding-top: 5px;
+        border-top: 1px dashed #cbd5e1;
       }
 
       .pv-doc-badge {
         background: #1e3a8a !important;
         color: #ffffff !important;
-        font-size: 10px;
+        font-size: 9.5px;
         font-weight: 800;
         padding: 2px 8px;
         border-radius: 3px;
@@ -2116,7 +2636,7 @@
       }
 
       .pv-date-line {
-        font-size: 12px;
+        font-size: 11.5px;
         font-weight: 800;
         color: #0f172a;
       }
@@ -2132,16 +2652,6 @@
         width: 100% !important;
         grid-template-columns: repeat(4, 1fr);
         gap: 8px;
-        margin-bottom: 8px;
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
-
-      body.print-history-mode .print-history-summary {
-        display: grid !important;
-        width: 100% !important;
-        grid-template-columns: 1fr;
-        gap: 6px;
         margin-bottom: 8px;
         page-break-inside: avoid;
         break-inside: avoid;
@@ -2435,6 +2945,64 @@
         margin-bottom: 6px !important;
         font-size: 11px !important;
       }
+
+      /* அச்சு முறை 3: தனிப்பட்ட ரசீது அச்சு (Receipt Print Mode) */
+      body.print-receipt-mode .app-shell,
+      body.print-receipt-mode #detailModal,
+      body.print-receipt-mode #calcModal,
+      body.print-receipt-mode #customCatModal,
+      body.print-receipt-mode .receipt-no-print {
+        display: none !important;
+      }
+
+      body.print-receipt-mode #receiptModal.open {
+        display: block !important;
+        position: static !important;
+        inset: auto !important;
+        background: #ffffff !important;
+        backdrop-filter: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      body.print-receipt-mode #receiptModal .modal-window {
+        max-width: 100% !important;
+        width: 100% !important;
+        max-height: none !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+      }
+
+      body.print-receipt-mode .receipt-paper {
+        border: 2px solid #0f172a !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding: 12px 14px !important;
+        width: 100% !important;
+      }
+
+      body.print-receipt-mode .receipt-paper .tbl-responsive {
+        overflow: visible !important;
+        border: 1.5px solid #0f172a !important;
+        border-radius: 0 !important;
+      }
+
+      body.print-receipt-mode .receipt-paper table.corp-table th,
+      body.print-receipt-mode .receipt-paper table.corp-table td {
+        padding: 5px 7px !important;
+        font-size: 11.5px !important;
+        border-bottom: 1px solid #cbd5e1 !important;
+        border-right: 1px solid #cbd5e1 !important;
+      }
+
+      body.print-receipt-mode .receipt-paper table.corp-table tfoot td {
+        background: #f1f5f9 !important;
+        border-top: 1.5px solid #0f172a !important;
+        font-size: 12px !important;
+      }
     }
   </style>
 </head>
@@ -2451,7 +3019,7 @@
         </div>
       </div>
 
-      <div class="login-logo-wrap">
+      <div class="login-logo-wrap" data-brand-logo-slot="login">
         <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ஸ்ரீ லெட்சுமி பைனான்ஸ் இலச்சினை">
           <rect x="2" y="2" width="60" height="60" rx="16" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="2.5"/>
           <circle cx="32" cy="32" r="21" fill="#FFFFFF" stroke="#D97706" stroke-width="2"/>
@@ -2506,7 +3074,7 @@
     <header class="corp-header">
       <div class="corp-header-inner">
         <div class="header-brand">
-          <div class="logo-frame">
+          <div class="logo-frame" data-brand-logo-slot="header">
             <svg width="30" height="30" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="2" y="2" width="60" height="60" rx="14" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="3"/>
               <circle cx="32" cy="32" r="20" fill="#FFFFFF" stroke="#D97706" stroke-width="2.5"/>
@@ -2564,8 +3132,10 @@
         <div class="white-panel">
           <!-- நிறுவனத் தர பிடிஎஃப் லெட்டர்ஹெட் தலைப்பு -->
           <div class="print-only-voucher-top">
-            <div class="pv-left">
-              <svg width="42" height="42" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="pv-line-u" data-i18n="rcpLine1U">உ</div>
+            <div class="pv-line-sivamayam" data-i18n="rcpLine2Sivamayam">சிவமயம்</div>
+            <div class="pv-line-logo" data-brand-logo-slot="ledger-print">
+              <svg width="38" height="38" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="2" y="2" width="60" height="60" rx="14" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="3"/>
                 <circle cx="32" cy="32" r="20" fill="#FFFFFF" stroke="#D97706" stroke-width="2.5"/>
                 <path d="M32 14C28.5 19.5 28.5 24 32 27.5C35.5 24 35.5 19.5 32 14Z" fill="#D97706"/>
@@ -2573,16 +3143,13 @@
                 <path d="M43 21C42.5 26 39.5 28.5 35 29C37 24.5 39.5 22 43 21Z" fill="#F59E0B"/>
                 <text x="32" y="45" text-anchor="middle" fill="#1E3A8A" font-size="18" font-weight="800" font-family="sans-serif">₹</text>
               </svg>
-              <div>
-                <div class="pv-sacred" data-i18n="sacred">உ • சிவமயம்</div>
-                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
-                <div class="pv-office-sub" id="printOfficeTagline"></div>
-              </div>
             </div>
-            <div class="pv-right">
+            <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
+            <div class="pv-office-sub" id="printOfficeTagline"></div>
+            <div class="pv-meta-bar">
               <span class="pv-doc-badge" data-i18n="pdfDailyBadge">தினசரி கணக்கு அறிக்கை</span>
-              <div class="pv-date-line" id="printVoucherDate">தேதி: —</div>
-              <div class="pv-ref-line" id="printVoucherRef">Ref: SLF-00000000</div>
+              <span class="pv-date-line" id="printVoucherDate">தேதி: —</span>
+              <span class="pv-ref-line" id="printVoucherRef">Ref: SLF-00000000</span>
             </div>
           </div>
 
@@ -2604,6 +3171,14 @@
               <div class="pe-lbl inc-label" data-i18n="rowClosing">இருப்பு</div>
               <div class="pe-val inc-text" id="peClosingVal">₹ 0</div>
             </div>
+          </div>
+
+          <!-- பழைய தேதி பூட்டுப் பட்டை -->
+          <div class="past-date-lock-banner" id="pastDateLockBanner">
+            <span id="pastDateLockText">🔒 பழைய தேதியின் கணக்கு பூட்டப்பட்டுள்ளது</span>
+            <button type="button" class="btn btn-gold-outline" id="btnTogglePastLock" style="padding: 5px 11px; min-height: 32px; font-size: 12px;" onclick="togglePastDateLock()">
+              🔓 திருத்த அனுமதி
+            </button>
           </div>
 
           <!-- செயல்பாட்டுப் பட்டை -->
@@ -2899,31 +3474,22 @@
         <div class="white-panel">
           <!-- வரலாறு பிடிஎஃப் அச்சுக்கான நிறுவனத் தலைப்பு -->
           <div class="print-history-header">
-            <div class="pv-left">
-              <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="pv-line-u" data-i18n="rcpLine1U">உ</div>
+            <div class="pv-line-sivamayam" data-i18n="rcpLine2Sivamayam">சிவமயம்</div>
+            <div class="pv-line-logo" data-brand-logo-slot="hist-print">
+              <svg width="38" height="38" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="2" y="2" width="60" height="60" rx="14" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="3"/>
                 <circle cx="32" cy="32" r="20" fill="#FFFFFF" stroke="#D97706" stroke-width="2.5"/>
                 <path d="M32 14C28.5 19.5 28.5 24 32 27.5C35.5 24 35.5 19.5 32 14Z" fill="#D97706"/>
                 <text x="32" y="45" text-anchor="middle" fill="#1E3A8A" font-size="18" font-weight="800" font-family="sans-serif">₹</text>
               </svg>
-              <div>
-                <div class="pv-sacred" data-i18n="sacred">உ • சிவமயம்</div>
-                <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
-                <div class="pv-office-sub" id="printHistOfficeTagline"></div>
-              </div>
             </div>
-            <div class="pv-right">
+            <div class="pv-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
+            <div class="pv-office-sub" id="printHistOfficeTagline"></div>
+            <div class="pv-meta-bar">
               <span class="pv-doc-badge" data-i18n="pdfHistBadge">தொகுப்பு கணக்கு அறிக்கை</span>
-              <div class="pv-date-line" id="printHistScopeText">—</div>
-              <div class="pv-ref-line" id="printHistGeneratedDate">—</div>
-            </div>
-          </div>
-
-          <!-- வரலாறு பிடிஎஃப் அச்சில் மட்டும் தோன்றும் மொத்தச் சுருக்கம் -->
-          <div class="print-history-summary">
-            <div class="pe-box pe-inc">
-              <div class="pe-lbl inc-label" data-i18n="histTotalColLbl">மொத்த வசூல்</div>
-              <div class="pe-val inc-text" id="printHistTotalCol">₹ 0</div>
+              <span class="pv-date-line" id="printHistScopeText">—</span>
+              <span class="pv-ref-line" id="printHistGeneratedDate">—</span>
             </div>
           </div>
 
@@ -3011,14 +3577,129 @@
       <!-- ============ பக்கம் 4: அமைப்புகள் (சூப்பபேஸ் இணைப்பு இங்கே மட்டுமே உள்ளது) ============ -->
       <section id="settingsView" class="page-view">
         <div class="white-panel">
-          <h2 style="font-size: 18px; color: var(--corp-navy); margin-bottom: 16px;" data-i18n="settingsHeading">⚙️ சூப்பபேஸ் தரவுத்தளம் மற்றும் பயன்பாட்டு அமைப்புகள்</h2>
+          <!-- அமைப்புகள் முகப்பு அட்டைகள் (Settings Hub Overview) -->
+          <div id="settingsHubPanel">
+            <h2 style="font-size: 18px; color: var(--corp-navy); margin-bottom: 16px;" data-i18n="settingsHeading">⚙️ சூப்பபேஸ் தரவுத்தளம் மற்றும் பயன்பாட்டு அமைப்புகள்</h2>
 
-          <div class="settings-grid">
-            <!-- சூப்பபேஸ் தரவுத்தள இணைப்பு (Settings பக்கத்தில் மட்டுமே) -->
-            <div class="setting-card full-span">
+            <div class="settings-hub-grid">
+              <!-- அட்டை 1: நிறுவன விவரம் & உள்நுழைவு மாற்றம் -->
+              <div class="settings-hub-card" onclick="openSettingsSubView('company')">
+                <div>
+                  <div class="settings-hub-top">
+                    <div class="settings-hub-icon">🏢</div>
+                    <span class="status-badge sb-in" id="hubCompanyBadge" data-i18n="hubCompanyTag">நிறுவனம் & பின்</span>
+                  </div>
+                  <div class="settings-hub-title" data-i18n="loginCardTitle">🔐 நிறுவன விவரம் & உள்நுழைவு மாற்றம்</div>
+                  <p class="settings-hub-desc" style="margin-top: 6px;" data-i18n="hubCompanyDesc">
+                    நிறுவனப் பெயர், இலச்சினை, கிளை முகவரி, பயனர் பெயர் மற்றும் கடவுச்சொல் / பின் விவரங்களைத் திறந்து மாற்றவும்.
+                  </p>
+                </div>
+                <div class="settings-hub-footer">
+                  <span data-i18n="btnOpenSection">விவரங்களைத் திற</span>
+                  <span>→</span>
+                </div>
+              </div>
+
+              <!-- அட்டை 2: சூப்பபேஸ் தரவுத்தள இணைப்பு -->
+              <div class="settings-hub-card" onclick="openSettingsSubView('supabase')">
+                <div>
+                  <div class="settings-hub-top">
+                    <div class="settings-hub-icon">⚡</div>
+                    <span id="hubSupaBadge" class="status-badge sb-out">இணைக்கப்படவில்லை</span>
+                  </div>
+                  <div class="settings-hub-title" data-i18n="supaCardTitle">⚡ சூப்பபேஸ் தரவுத்தள இணைப்பு</div>
+                  <p class="settings-hub-desc" style="margin-top: 6px;" data-i18n="supaCardDesc">
+                    உங்கள் சூப்பபேஸ் திட்ட முகவரி (Project URL) மற்றும் பொதுத் திறவுகோலை (Anon Public Key) கீழே உள்ளிட்டு இணைத்தால், தினசரி கணக்குகள் மற்றும் யுபிஐ விவரங்கள் அனைத்தும் சூப்பபேஸ் தரவுத்தளத்தில் சேமிக்கப்படும். (Service Role Key-ஐ ஒருபோதும் உள்ளிட வேண்டாம்.)
+                  </p>
+                </div>
+                <div class="settings-hub-footer">
+                  <span data-i18n="btnOpenSection">விவரங்களைத் திற</span>
+                  <span>→</span>
+                </div>
+              </div>
+
+              <!-- அட்டை 3: கோப்பு காப்புப்பிரதி & மீட்டமைப்பு -->
+              <div class="settings-hub-card" onclick="openSettingsSubView('backup')">
+                <div>
+                  <div class="settings-hub-top">
+                    <div class="settings-hub-icon">💾</div>
+                    <span class="status-badge sb-in" data-i18n="hubBackupTag">JSON & படிவம்</span>
+                  </div>
+                  <div class="settings-hub-title" data-i18n="backupCardTitle">💾 கோப்பு காப்புப்பிரதி & மீட்டமைப்பு</div>
+                  <p class="settings-hub-desc" style="margin-top: 6px;" data-i18n="backupCardDesc">
+                    உங்கள் அனைத்து நாட்களின் கணக்கு விவரங்களையும் கோப்பாகப் பாதுகாத்து வைத்துக்கொள்ளலாம்.
+                  </p>
+                </div>
+                <div class="settings-hub-footer">
+                  <span data-i18n="btnOpenSection">விவரங்களைத் திற</span>
+                  <span>→</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- துணைப் பக்கம் 1: நிறுவன விவரம் & உள்நுழைவு மாற்றம் -->
+          <div id="settingsSub_company" style="display: none;">
+            <div class="settings-detail-topbar">
+              <button type="button" class="btn btn-white" onclick="backToSettingsHub()">
+                <span>←</span>
+                <span data-i18n="btnBackToSettings">அமைப்புகள் பக்கத்திற்குத் திரும்புக</span>
+              </button>
+              <span class="status-badge sb-in" data-i18n="loginCardTitle">🔐 நிறுவன விவரம் & உள்நுழைவு மாற்றம்</span>
+            </div>
+
+            <div class="setting-card">
+              <h3 data-i18n="loginCardTitle">🔐 நிறுவன விவரம் & உள்நுழைவு மாற்றம்</h3>
+              <form onsubmit="saveSimpleLoginSettings(event)">
+                <div class="form-field">
+                  <label for="cfgOfficeSub" data-i18n="officeSubLbl">நிறுவன முகவரி / கிளை (பிடிஎஃப் தலைப்பிற்கு)</label>
+                  <input type="text" id="cfgOfficeSub" class="corp-input" data-i18n-ph="officeSubPh" placeholder="உதாரணம்: தலைமை அலுவலகம், கோயம்புத்தூர்" />
+                </div>
+                <div class="form-field">
+                  <label for="cfgUserName" data-i18n="userNameLbl">பயனர் பெயர்</label>
+                  <input type="text" id="cfgUserName" class="corp-input" data-i18n-ph="userNamePh" placeholder="உங்கள் பெயர்" />
+                </div>
+                <div class="form-field">
+                  <label for="cfgBrandName" data-i18n="customBrandNameLbl">நிறுவனப் பெயர் (Finance Name)</label>
+                  <input type="text" id="cfgBrandName" class="corp-input" data-i18n-ph="customBrandNamePh" placeholder="ஸ்ரீ லெட்சுமி பைனான்ஸ்" />
+                </div>
+                <div class="form-field">
+                  <label data-i18n="customLogoLbl">நிறுவன இலச்சினை (Custom Brand Logo)</label>
+                  <div class="brand-logo-custom-box">
+                    <div id="cfgLogoPreviewWrap"></div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; flex: 1;">
+                      <label class="btn btn-white" style="cursor: pointer; padding: 6px 10px; min-height: 34px; font-size: 12px;">
+                        <span data-i18n="btnUploadLogo">🖼️ இலச்சினை தேர்வு</span>
+                        <input type="file" id="cfgLogoFile" accept="image/png,image/jpeg,image/webp,image/svg+xml" style="display: none;" onchange="onCustomLogoUpload(event)" />
+                      </label>
+                      <button type="button" class="btn btn-rose-outline" style="padding: 6px 10px; min-height: 34px; font-size: 12px;" onclick="resetCustomBrandLogo()" data-i18n="btnResetLogo">
+                        ↺ இயல்பு
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="cfgUserPass" data-i18n="newPassLbl">புதிய கடவுச்சொல் / பின் (PIN)</label>
+                  <input type="text" id="cfgUserPass" class="corp-input" data-i18n-ph="newPassPh" placeholder="புதிய கடவுச்சொல்" required />
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;" data-i18n="btnSaveLogin">விவரங்களைச் சேமி</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- துணைப் பக்கம் 2: சூப்பபேஸ் தரவுத்தள இணைப்பு -->
+          <div id="settingsSub_supabase" style="display: none;">
+            <div class="settings-detail-topbar">
+              <button type="button" class="btn btn-white" onclick="backToSettingsHub()">
+                <span>←</span>
+                <span data-i18n="btnBackToSettings">அமைப்புகள் பக்கத்திற்குத் திரும்புக</span>
+              </button>
+              <span id="settingsDbBadge" class="status-badge sb-out">இணைக்கப்படவில்லை</span>
+            </div>
+
+            <div class="setting-card">
               <h3>
                 <span data-i18n="supaCardTitle">⚡ சூப்பபேஸ் தரவுத்தள இணைப்பு</span>
-                <span id="settingsDbBadge" class="status-badge sb-out">இணைக்கப்படவில்லை</span>
               </h3>
               <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 14px;" data-i18n="supaCardDesc">
                 உங்கள் சூப்பபேஸ் திட்ட முகவரி (Project URL) மற்றும் பொதுத் திறவுகோலை (Anon Public Key) கீழே உள்ளிட்டு இணைத்தால், தினசரி கணக்குகள் மற்றும் யுபிஐ விவரங்கள் அனைத்தும் சூப்பபேஸ் தரவுத்தளத்தில் சேமிக்கப்படும். (Service Role Key-ஐ ஒருபோதும் உள்ளிட வேண்டாம்.)
@@ -3070,28 +3751,18 @@ CREATE POLICY "Valid ledger rows access"
 
               <div id="dbSyncLog" class="db-log-text">நிலை: சரிபார்க்கப்படுகிறது...</div>
             </div>
+          </div>
 
-            <!-- நிறுவன முகவரி & எளிய உள்நுழைவு விவரம் மாற்றம் -->
-            <div class="setting-card">
-              <h3 data-i18n="loginCardTitle">🔐 நிறுவன விவரம் & உள்நுழைவு மாற்றம்</h3>
-              <form onsubmit="saveSimpleLoginSettings(event)">
-                <div class="form-field">
-                  <label for="cfgOfficeSub" data-i18n="officeSubLbl">நிறுவன முகவரி / கிளை (பிடிஎஃப் தலைப்பிற்கு)</label>
-                  <input type="text" id="cfgOfficeSub" class="corp-input" data-i18n-ph="officeSubPh" placeholder="உதாரணம்: தலைமை அலுவலகம், கோயம்புத்தூர்" />
-                </div>
-                <div class="form-field">
-                  <label for="cfgUserName" data-i18n="userNameLbl">பயனர் பெயர்</label>
-                  <input type="text" id="cfgUserName" class="corp-input" data-i18n-ph="userNamePh" placeholder="உங்கள் பெயர்" />
-                </div>
-                <div class="form-field">
-                  <label for="cfgUserPass" data-i18n="newPassLbl">புதிய கடவுச்சொல் / பின் (PIN)</label>
-                  <input type="text" id="cfgUserPass" class="corp-input" data-i18n-ph="newPassPh" placeholder="புதிய கடவுச்சொல்" required />
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;" data-i18n="btnSaveLogin">விவரங்களைச் சேமி</button>
-              </form>
+          <!-- துணைப் பக்கம் 3: கோப்பு காப்புப்பிரதி & மீட்டமைப்பு -->
+          <div id="settingsSub_backup" style="display: none;">
+            <div class="settings-detail-topbar">
+              <button type="button" class="btn btn-white" onclick="backToSettingsHub()">
+                <span>←</span>
+                <span data-i18n="btnBackToSettings">அமைப்புகள் பக்கத்திற்குத் திரும்புக</span>
+              </button>
+              <span class="status-badge sb-in" data-i18n="backupCardTitle">💾 கோப்பு காப்புப்பிரதி & மீட்டமைப்பு</span>
             </div>
 
-            <!-- கோப்பு காப்புப்பிரதி & மீட்டமைப்பு -->
             <div class="setting-card">
               <h3 data-i18n="backupCardTitle">💾 கோப்பு காப்புப்பிரதி & மீட்டமைப்பு</h3>
               <p style="font-size: 13px; color: var(--text-sub); margin-bottom: 14px;" data-i18n="backupCardDesc">
@@ -3141,6 +3812,150 @@ CREATE POLICY "Valid ledger rows access"
         <button type="button" class="modal-close-btn" onclick="closeModal('detailModal')">&times;</button>
       </div>
       <div id="detailModalBody"></div>
+    </div>
+  </div>
+
+  <!-- தனிப்பயன் உறுதிப்படுத்தல் சாளரம் (Browser Pop-up Replacement) -->
+  <div class="modal-mask" id="customConfirmModal" onclick="resolveCustomConfirm(false)">
+    <div class="modal-window confirm-modal-window" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 id="customConfirmTitle" style="font-size: 16.5px; color: var(--corp-navy);" data-i18n="confirmDialogTitle">உறுதிப்படுத்தவும்</h3>
+        <button type="button" class="modal-close-btn" onclick="resolveCustomConfirm(false)">&times;</button>
+      </div>
+      <div id="customConfirmMessage" class="confirm-modal-msg"></div>
+      <div class="confirm-modal-actions">
+        <button type="button" class="btn btn-white" id="btnConfirmCancel" onclick="resolveCustomConfirm(false)" data-i18n="btnConfirmCancel">ரத்து செய்</button>
+        <button type="button" class="btn btn-primary" id="btnConfirmOk" onclick="resolveCustomConfirm(true)" data-i18n="btnConfirmOk">சரி, தொடரவும்</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ரசீது சாளரம் (Receipt Modal) -->
+  <div class="modal-mask" id="receiptModal" onclick="closeModal('receiptModal')">
+    <div class="modal-window" style="max-width: 620px;" onclick="event.stopPropagation()">
+      <div class="modal-header receipt-no-print">
+        <h3 style="font-size: 17px; color: var(--corp-navy);" data-i18n="receiptModalTitle">🧾 ரசீது (Receipt)</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('receiptModal')">&times;</button>
+      </div>
+
+      <!-- ரசீது கூடுதல் விருப்பங்கள் (Extra Options) -->
+      <div class="receipt-controls-box receipt-no-print">
+        <div class="receipt-ctrl-grid">
+          <select id="receiptScopeFilter" class="f-input" onchange="renderReceiptBody()">
+            <option value="all" data-i18n="rcpScopeAll">அனைத்துப் பதிவுகளும் (வரவு + செலவு)</option>
+            <option value="income" data-i18n="rcpScopeInc">வரவு / வசூல் மட்டும்</option>
+            <option value="expense" data-i18n="rcpScopeExp">செலவு / அடப்பு மட்டும்</option>
+          </select>
+          <div class="hist-date-pill" style="min-height: 36px;">
+            <label for="receiptToDate" data-i18n="rcpTodayLbl">இன்றைய தேதி:</label>
+            <input type="date" id="receiptToDate" onchange="renderReceiptBody()" />
+          </div>
+        </div>
+        <div class="receipt-ctrl-grid">
+          <input type="text" id="receiptCustName" class="f-input" data-i18n-ph="rcpCustNamePh" placeholder="வாடிக்கையாளர் பெயர் (விருப்பத்திற்கு)" oninput="updateReceiptMetaDisplay()" />
+          <input type="tel" id="receiptCustPhone" class="f-input" data-i18n-ph="rcpCustPhonePh" placeholder="கைபேசி எண் (வாட்ஸ்அப் அனுப்ப)" oninput="updateReceiptMetaDisplay()" />
+        </div>
+
+        <!-- விருப்பத் தேர்வுகள் (Tick Boxes): கையொப்பம், வட்டி & வாரமாக மாற்று -->
+        <div class="rcp-toggle-row">
+          <label class="rcp-chk-label">
+            <input type="checkbox" id="receiptSignChk" checked onchange="toggleReceiptSignature()" />
+            <span data-i18n="rcpChkSignature">கையொப்பம் (Signature)</span>
+          </label>
+          <label class="rcp-chk-label">
+            <input type="checkbox" id="receiptInterestChk" onchange="toggleReceiptInterestManual()" />
+            <span data-i18n="rcpChkInterest">வட்டி கைமுறை உள்ளீடு (Interest)</span>
+          </label>
+          <label class="rcp-chk-label">
+            <input type="checkbox" id="receiptWeeklyChk" onchange="toggleReceiptWeeklyMode()" />
+            <span data-i18n="rcpChkWeekly">நாட்களை வாரமாக மாற்று (Days → Week)</span>
+          </label>
+        </div>
+
+        <!-- வாரக் கணக்குத் தேர்வுப் பெட்டி (Days -> Weekly Tick செய்தால் மட்டும் தோன்றும்) -->
+        <div class="rcp-weekly-manual-box" id="receiptWeeklyManualBox">
+          <select id="receiptWeekFractionMode" class="f-input" onchange="toggleReceiptWeeklyMode()">
+            <option value="decimal" data-i18n="rcpWeekDecimalOpt">தசம வாரம் (உதாரணம்: 16 நாள் = 2.29 வாரம்)</option>
+            <option value="manual" data-i18n="rcpWeekManualOpt">கைமுறை வார எண்ணிக்கை (Manual Entry)</option>
+          </select>
+          <input type="number" step="any" inputmode="decimal" id="receiptManualWeekVal" class="f-input" style="display: none; text-align: right; font-weight: 800;" data-i18n-ph="rcpWeekManualPh" placeholder="வார எண்ணிக்கை உள்ளிடவும் (உதா: 2 or 2.5)" oninput="renderReceiptBody()" />
+        </div>
+
+        <!-- வட்டி கைமுறை உள்ளீடு பெட்டி (Tick செய்தால் மட்டும் தோன்றும்) -->
+        <div class="rcp-interest-manual-box" id="receiptInterestManualBox">
+          <input type="text" id="receiptInterestLabel" class="f-input" data-i18n-ph="rcpInterestLblPh" placeholder="வட்டி விவரம் (உதாரணம்: மாத வட்டி 2%)" oninput="renderReceiptBody()" />
+          <div class="amt-field-box" style="max-width: 100%;">
+            <span class="rs-symbol exp">₹</span>
+            <input type="number" inputmode="numeric" id="receiptInterestAmt" class="f-input" style="width: 100%; padding-left: 24px; text-align: right; font-weight: 800;" data-i18n-ph="rcpInterestAmtPh" placeholder="வட்டித் தொகை (0)" oninput="renderReceiptBody()" />
+          </div>
+        </div>
+
+        <input type="text" id="receiptExtraNote" class="f-input" style="width: 100%;" data-i18n-ph="rcpNotePh" placeholder="கூடுதல் குறிப்பு (தேவைப்படின்)..." oninput="updateReceiptMetaDisplay()" />
+      </div>
+
+      <!-- அச்சிடக்கூடிய நிறுவன ரசீது படிவம் -->
+      <div class="receipt-paper" id="receiptPaperArea">
+        <div class="rcp-header">
+          <!-- Line 1: U -->
+          <div class="rcp-line-u" data-i18n="rcpLine1U">உ</div>
+          <!-- Line 2: Sivamayam -->
+          <div class="rcp-line-sivamayam" data-i18n="rcpLine2Sivamayam">சிவமயம்</div>
+          <!-- Line 3: Logo -->
+          <div class="rcp-line-logo" data-brand-logo-slot="receipt">
+            <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="2" width="60" height="60" rx="14" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="3"/>
+              <circle cx="32" cy="32" r="20" fill="#FFFFFF" stroke="#D97706" stroke-width="2.5"/>
+              <path d="M32 14C28.5 19.5 28.5 24 32 27.5C35.5 24 35.5 19.5 32 14Z" fill="#D97706"/>
+              <path d="M21 21C21.5 26 24.5 28.5 29 29C27 24.5 24.5 22 21 21Z" fill="#F59E0B"/>
+              <path d="M43 21C42.5 26 39.5 28.5 35 29C37 24.5 39.5 22 43 21Z" fill="#F59E0B"/>
+              <text x="32" y="45" text-anchor="middle" fill="#1E3A8A" font-size="18" font-weight="800" font-family="sans-serif">₹</text>
+            </svg>
+          </div>
+          <!-- Line 4: Finance Name -->
+          <div class="rcp-brand-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
+          <div class="rcp-office-sub" id="receiptOfficeSub"></div>
+        </div>
+
+        <div class="rcp-meta-strip">
+          <span class="rcp-badge" data-i18n="rcpOfficialBadge">பற்று / வரவு ரசீது</span>
+          <span id="receiptNoVal">No: RCP-00000000</span>
+          <span id="receiptTodayVal">இன்று: —</span>
+        </div>
+
+        <div class="rcp-cust-strip" id="receiptCustDisplayRow">
+          <span id="receiptCustDisplayVal"></span>
+        </div>
+
+        <div class="tbl-responsive">
+          <table class="corp-table">
+            <thead>
+              <tr>
+                <th class="receipt-no-print" style="width: 32px; text-align: center;">✓</th>
+                <th style="width: 48px; text-align: center;" data-i18n="rcpColSNo">வ.எண்</th>
+                <th data-i18n="thDate">தேதி</th>
+                <th data-i18n="rcpColName">பெயர்</th>
+                <th class="align-r" data-i18n="thAmount">தொகை</th>
+                <th id="receiptDurationTh" style="text-align: center;" data-i18n="rcpColDays">நாட்கள்</th>
+              </tr>
+            </thead>
+            <tbody id="receiptTableBody"></tbody>
+            <tfoot id="receiptTableFoot"></tfoot>
+          </table>
+        </div>
+
+        <div class="rcp-note-box" id="receiptNoteDisplay"></div>
+
+        <div class="rcp-sign-row" id="receiptSignRow">
+          <div class="rcp-sign-box" data-i18n="rcpReceiverSign">பெறுநர் கையொப்பம்</div>
+          <div class="rcp-sign-box" data-i18n="rcpAuthSign">அங்கீகரிக்கப்பட்ட கையொப்பம்</div>
+        </div>
+      </div>
+
+      <div class="rcp-actions-bar receipt-no-print">
+        <button type="button" class="btn btn-dark" onclick="printReceiptPDF()" data-i18n="btnPrintReceipt">🖨️ பிடிஎஃப் / அச்சு</button>
+        <button type="button" class="btn btn-wa" onclick="shareReceiptWhatsApp()" data-i18n="btnWa">💬 வாட்ஸ்அப்</button>
+        <button type="button" class="btn btn-white" onclick="copyReceiptText()" data-i18n="btnCopy">📋 நகலெடு</button>
+      </div>
     </div>
   </div>
 
@@ -3233,6 +4048,7 @@ CREATE POLICY "Valid ledger rows access"
     const SESS_KEY = "sri_lakshmi_corp_logged_in";
     const LANG_KEY = "sri_lakshmi_corp_lang";
     const CUSTOM_CATS_KEY = "sri_lakshmi_corp_custom_categories";
+    const CUSTOM_BRAND_KEY = "sri_lakshmi_corp_custom_brand";
 
     const I18N = {
       ta: {
@@ -3351,11 +4167,53 @@ CREATE POLICY "Valid ledger rows access"
         btnView: "பார்",
         btnEdit: "திருத்து",
         btnDelete: "நீக்கு",
+        btnReceipt: "🧾 ரசீது",
+        receiptModalTitle: "🧾 ரசீது (Receipt)",
+        rcpScopeAll: "அனைத்துப் பதிவுகளும் (வரவு + செலவு)",
+        rcpScopeInc: "வரவு / வசூல் மட்டும்",
+        rcpScopeExp: "செலவு / அடப்பு மட்டும்",
+        rcpTodayLbl: "இன்றைய தேதி:",
+        rcpCustNamePh: "வாடிக்கையாளர் பெயர் (விருப்பத்திற்கு)",
+        rcpCustPhonePh: "கைபேசி எண் (வாட்ஸ்அப் அனுப்ப)",
+        rcpNotePh: "கூடுதல் குறிப்பு / வட்டி விவரம் (தேவைப்படின்)...",
+        rcpLine1U: "உ",
+        rcpLine2Sivamayam: "சிவமயம்",
+        rcpChkSignature: "கையொப்பம் (Signature)",
+        rcpChkInterest: "வட்டி கைமுறை உள்ளீடு (Interest)",
+        rcpChkWeekly: "நாட்களை வாரமாக மாற்று (Days → Week)",
+        rcpColWeek: "வாரம் (Week)",
+        rcpWeekSingular: "வாரம்",
+        rcpWeekPlural: "வாரங்கள்",
+        rcpWeekDecimalOpt: "தசம வாரம் (உதாரணம்: 16 நாள் = 2.29 வாரம்)",
+        rcpWeekManualOpt: "கைமுறை வார எண்ணிக்கை (Manual Entry)",
+        rcpWeekManualPh: "வார எண்ணிக்கை உள்ளிடவும் (உதா: 2 or 2.5)",
+        rcpInterestLblPh: "வட்டி விவரம் (உதாரணம்: மாத வட்டி)",
+        rcpInterestAmtPh: "வட்டித் தொகை",
+        rcpInterestDefaultLbl: "வட்டி (Interest)",
+        rcpNetPayableLbl: "மொத்தத் தொகை (வட்டியுடன்)",
+        rcpOfficialBadge: "பற்று / வரவு ரசீது",
+        rcpColSNo: "வ.எண்",
+        rcpColName: "பெயர்",
+        rcpColDays: "நாட்கள்",
+        rcpDaySingular: "நாள்",
+        rcpDayPlural: "நாட்கள்",
+        rcpTodayTag: "இன்று",
+        rcpCustLbl: "வாடிக்கையாளர்",
+        rcpPhoneLbl: "கைபேசி",
+        rcpReceiverSign: "பெறுநர் கையொப்பம்",
+        rcpAuthSign: "அங்கீகரிக்கப்பட்ட கையொப்பம்",
+        btnPrintReceipt: "🖨️ பிடிஎஃப் / அச்சு",
+        rcpNoItems: "தேர்ந்தெடுக்கப்பட்ட பிரிவில் பதிவுகள் இல்லை",
         noRecords: "பொருந்தும் கணக்குப் பதிவுகள் இல்லை",
         noTxns: "பொருந்தும் பரிவர்த்தனைகள் இல்லை",
         noDetails: "விவரம் இல்லை",
         histTotalColLbl: "மொத்த வசூல்",
         settingsHeading: "⚙️ சூப்பபேஸ் தரவுத்தளம் மற்றும் பயன்பாட்டு அமைப்புகள்",
+        hubCompanyTag: "நிறுவனம் & பின்",
+        hubCompanyDesc: "நிறுவனப் பெயர், இலச்சினை, கிளை முகவரி, பயனர் பெயர் மற்றும் கடவுச்சொல் / பின் விவரங்களைத் திறந்து மாற்றவும்.",
+        hubBackupTag: "JSON & படிவம்",
+        btnOpenSection: "விவரங்களைத் திற",
+        btnBackToSettings: "அமைப்புகள் பக்கத்திற்குத் திரும்புக",
         supaCardTitle: "⚡ சூப்பபேஸ் தரவுத்தள இணைப்பு",
         supaCardDesc: "உங்கள் சூப்பபேஸ் திட்ட முகவரி (Project URL) மற்றும் பொதுத் திறவுகோலை (Anon Public Key) கீழே உள்ளிட்டு இணைத்தால், தினசரி கணக்குகள் மற்றும் யுபிஐ விவரங்கள் அனைத்தும் சூப்பபேஸ் தரவுத்தளத்தில் சேமிக்கப்படும். (Service Role Key-ஐ ஒருபோதும் உள்ளிட வேண்டாம்.)",
         supaUrlLbl: "சூப்பபேஸ் திட்ட முகவரி (Project URL)",
@@ -3368,6 +4226,14 @@ CREATE POLICY "Valid ledger rows access"
         btnPullDb: "⬇️ தரவுத்தளத்திலிருந்து எடு",
         btnDisconnectDb: "✖ இணைப்பைத் துண்டி",
         loginCardTitle: "🔐 நிறுவன விவரம் & உள்நுழைவு மாற்றம்",
+        customBrandNameLbl: "நிறுவனப் பெயர் (Finance Name)",
+        customBrandNamePh: "ஸ்ரீ லெட்சுமி பைனான்ஸ்",
+        customLogoLbl: "நிறுவன இலச்சினை (Custom Brand Logo)",
+        btnUploadLogo: "🖼️ இலச்சினை தேர்வு",
+        btnResetLogo: "↺ இயல்பு",
+        logoUpdatedToast: "நிறுவன இலச்சினை புதுப்பிக்கப்பட்டது!",
+        logoResetToast: "இயல்புநிலை இலச்சினை மாற்றப்பட்டது!",
+        logoSizeErrToast: "இலச்சினை கோப்பு 1MB-க்கு மிகாமல் இருக்க வேண்டும்!",
         officeSubLbl: "நிறுவன முகவரி / கிளை (பிடிஎஃப் தலைப்பிற்கு)",
         officeSubPh: "உதாரணம்: தலைமை அலுவலகம், கோயம்புத்தூர்",
         newPassLbl: "புதிய கடவுச்சொல் / பின் (PIN)",
@@ -3378,6 +4244,14 @@ CREATE POLICY "Valid ledger rows access"
         btnExportJson: "⬇️ முழுத் தரவைப் பதிவிறக்கு",
         btnImportJson: "⬆️ காப்புப்பிரதி கோப்பை ஏற்று",
         btnClearToday: "🧹 இன்றைய படிவத்தைத் துடை",
+        confirmDialogTitle: "உறுதிப்படுத்தவும்",
+        btnConfirmOk: "சரி, தொடரவும்",
+        btnConfirmCancel: "ரத்து செய்",
+        pastDateLockedMsg: "🔒 பழைய தேதி கணக்கு பூட்டப்பட்டுள்ளது — திருத்த 'திருத்த அனுமதி' பொத்தானை அழுத்தவும்",
+        pastDateUnlockedMsg: "🔓 பழைய தேதி திருத்த அனுமதி வழங்கப்பட்டுள்ளது",
+        btnUnlockPastDate: "🔓 திருத்த அனுமதி",
+        btnLockPastDate: "🔒 மீண்டும் பூட்டு",
+        pastDateWarnTitle: "பழைய தேதி எச்சரிக்கை",
         calcTitle: "🧮 விரைவு கால்குலேட்டர்",
         dbConnectedBadge: "இணைக்கப்பட்டுள்ளது ✓",
         dbDisconnectedBadge: "இணைக்கப்படவில்லை",
@@ -3506,11 +4380,53 @@ CREATE POLICY "Valid ledger rows access"
         btnView: "View",
         btnEdit: "Edit",
         btnDelete: "Delete",
+        btnReceipt: "🧾 Receipt",
+        receiptModalTitle: "🧾 Official Receipt",
+        rcpScopeAll: "All Entries (Income + Expense)",
+        rcpScopeInc: "Income / Collection Only",
+        rcpScopeExp: "Expense / Outflow Only",
+        rcpTodayLbl: "Today Date:",
+        rcpCustNamePh: "Customer Name (Optional)",
+        rcpCustPhonePh: "Mobile Number (For WhatsApp)",
+        rcpNotePh: "Extra Note / Interest Details (Optional)...",
+        rcpLine1U: "U",
+        rcpLine2Sivamayam: "SIVAMAYAM",
+        rcpChkSignature: "Signature",
+        rcpChkInterest: "Interest (Manual Entry)",
+        rcpChkWeekly: "Days to Weekly",
+        rcpColWeek: "Week",
+        rcpWeekSingular: "Week",
+        rcpWeekPlural: "Weeks",
+        rcpWeekDecimalOpt: "Decimal Weeks (e.g., 16 days = 2.29 weeks)",
+        rcpWeekManualOpt: "Manual Week Entry",
+        rcpWeekManualPh: "Enter week count (e.g., 2 or 2.5)",
+        rcpInterestLblPh: "Interest Note (e.g., Monthly Interest 2%)",
+        rcpInterestAmtPh: "Interest Amount",
+        rcpInterestDefaultLbl: "Interest",
+        rcpNetPayableLbl: "Grand Total (With Interest)",
+        rcpOfficialBadge: "OFFICIAL RECEIPT",
+        rcpColSNo: "S.No",
+        rcpColName: "Name",
+        rcpColDays: "Days",
+        rcpDaySingular: "Day",
+        rcpDayPlural: "Days",
+        rcpTodayTag: "Today",
+        rcpCustLbl: "Customer",
+        rcpPhoneLbl: "Mobile",
+        rcpReceiverSign: "Receiver Signature",
+        rcpAuthSign: "Authorized Signatory",
+        btnPrintReceipt: "🖨️ Print / PDF",
+        rcpNoItems: "No entries found in the selected filter",
         noRecords: "No matching ledger records found",
         noTxns: "No matching transactions found",
         noDetails: "No details available",
         histTotalColLbl: "Total Collection",
         settingsHeading: "⚙️ Supabase Database & Application Settings",
+        hubCompanyTag: "Company & PIN",
+        hubCompanyDesc: "Open to edit finance name, logo, branch address, username, and password / PIN.",
+        hubBackupTag: "JSON & Form",
+        btnOpenSection: "Open Details",
+        btnBackToSettings: "Back to Settings",
         supaCardTitle: "⚡ Supabase Database Configuration",
         supaCardDesc: "Enter your Supabase Project URL and Anon Public Key below to sync daily ledgers and UPI details to Supabase. (Never enter the Service Role Key.)",
         supaUrlLbl: "Supabase Project URL",
@@ -3523,6 +4439,14 @@ CREATE POLICY "Valid ledger rows access"
         btnPullDb: "⬇️ Pull from DB",
         btnDisconnectDb: "✖ Disconnect",
         loginCardTitle: "🔐 Company Info & Login Settings",
+        customBrandNameLbl: "Finance Name",
+        customBrandNamePh: "SRI LAKSHMI FINANCE",
+        customLogoLbl: "Custom Brand Logo",
+        btnUploadLogo: "🖼️ Choose Logo",
+        btnResetLogo: "↺ Default",
+        logoUpdatedToast: "Custom brand logo updated!",
+        logoResetToast: "Reset to default brand logo!",
+        logoSizeErrToast: "Logo file must be under 1MB!",
         officeSubLbl: "Company Address / Branch (Shown on PDF Header)",
         officeSubPh: "Example: Head Office, Coimbatore",
         newPassLbl: "New Password / PIN",
@@ -3533,6 +4457,14 @@ CREATE POLICY "Valid ledger rows access"
         btnExportJson: "⬇️ Download Full Backup",
         btnImportJson: "⬆️ Restore Backup File",
         btnClearToday: "🧹 Clear Today's Form",
+        confirmDialogTitle: "Please Confirm",
+        btnConfirmOk: "Confirm",
+        btnConfirmCancel: "Cancel",
+        pastDateLockedMsg: "🔒 Past date record is locked — click 'Unlock Edit' to modify",
+        pastDateUnlockedMsg: "🔓 Past date editing is unlocked",
+        btnUnlockPastDate: "🔓 Unlock Edit",
+        btnLockPastDate: "🔒 Lock Again",
+        pastDateWarnTitle: "Past Date Warning",
         calcTitle: "🧮 Quick Calculator",
         dbConnectedBadge: "Connected ✓",
         dbDisconnectedBadge: "Not Connected",
@@ -3549,7 +4481,27 @@ CREATE POLICY "Valid ledger rows access"
 
     let currentLang = "ta";
 
+    function getCustomBrandConfig() {
+      const raw = safeStorageGet(localStorage, CUSTOM_BRAND_KEY);
+      if (!raw) return { brandName: "", logoDataUrl: "" };
+      try {
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return { brandName: "", logoDataUrl: "" };
+        const name = typeof parsed.brandName === "string" ? parsed.brandName.trim().slice(0, 100) : "";
+        const logo = typeof parsed.logoDataUrl === "string" && /^data:image\/(png|jpeg|jpg|webp|svg\+xml);base64,/.test(parsed.logoDataUrl)
+          ? parsed.logoDataUrl
+          : "";
+        return { brandName: name, logoDataUrl: logo };
+      } catch (e) {
+        return { brandName: "", logoDataUrl: "" };
+      }
+    }
+
     function t(key) {
+      if (key === "brandName") {
+        const cb = getCustomBrandConfig();
+        if (cb.brandName) return cb.brandName;
+      }
       return (I18N[currentLang] && I18N[currentLang][key]) || I18N.ta[key] || key;
     }
 
@@ -3585,6 +4537,9 @@ CREATE POLICY "Valid ledger rows access"
       renderDenomTable();
       renderHistory();
       renderCustomCatModalList();
+      if (activeReceiptDate) toggleReceiptWeeklyMode();
+      applyCustomBrandingToUI();
+      applyPastDateLockState();
     }
 
     const DB_KEY_LEGACY_LIST = [
@@ -3884,14 +4839,23 @@ CREATE POLICY "Valid ledger rows access"
     function saveSimpleLoginSettings(e) {
       e.preventDefault();
       const officeSub = document.getElementById("cfgOfficeSub").value.trim();
+      const brandNameInput = (document.getElementById("cfgBrandName").value || "").trim().slice(0, 100);
       const username = document.getElementById("cfgUserName").value.trim();
       const password = document.getElementById("cfgUserPass").value;
       if (!password) {
         showToast(currentLang === "en" ? "Enter a new password!" : "புதிய கடவுச்சொல்லை உள்ளிடவும்!");
         return;
       }
+      const curBrand = getCustomBrandConfig();
+      safeStorageSet(localStorage, CUSTOM_BRAND_KEY, JSON.stringify({
+        brandName: brandNameInput,
+        logoDataUrl: curBrand.logoDataUrl
+      }));
       if (safeStorageSet(localStorage, LOGIN_CFG_KEY, JSON.stringify({ username, password, officeSub }))) {
         applyOfficeTaglineToPrint();
+        applyCustomBrandingToUI();
+        renderHistory();
+        if (activeReceiptDate) renderReceiptBody();
         showToast(currentLang === "en" ? "Details saved!" : "விவரங்கள் சேமிக்கப்பட்டன!");
       }
     }
@@ -4006,6 +4970,11 @@ CREATE POLICY "Valid ledger rows access"
           setBadge.className = "status-badge sb-in";
           setBadge.textContent = t("dbConnectedBadge");
         }
+        const hubSupaBadgeConn = document.getElementById("hubSupaBadge");
+        if (hubSupaBadgeConn) {
+          hubSupaBadgeConn.className = "status-badge sb-in";
+          hubSupaBadgeConn.textContent = t("dbConnectedBadge");
+        }
         if (logEl) logEl.textContent = customMsg || (currentLang === "en" ? "Status: Connected to Supabase" : "நிலை: சூப்பபேஸ் தரவுத்தளத்துடன் இணைக்கப்பட்டுள்ளது");
       } else if (stateType === "error") {
         pill.classList.add("error");
@@ -4014,12 +4983,22 @@ CREATE POLICY "Valid ledger rows access"
           setBadge.className = "status-badge sb-out";
           setBadge.textContent = t("dbErrorBadge");
         }
+        const hubSupaBadgeErr = document.getElementById("hubSupaBadge");
+        if (hubSupaBadgeErr) {
+          hubSupaBadgeErr.className = "status-badge sb-out";
+          hubSupaBadgeErr.textContent = t("dbErrorBadge");
+        }
         if (logEl) logEl.textContent = customMsg || (currentLang === "en" ? "Status: Supabase connection error" : "நிலை: சூப்பபேஸ் தொடர்பில் பிழை ஏற்பட்டது");
       } else {
         lbl.textContent = t("dbPillLocal");
         if (setBadge) {
           setBadge.className = "status-badge sb-out";
           setBadge.textContent = t("dbDisconnectedBadge");
+        }
+        const hubSupaBadgeOff = document.getElementById("hubSupaBadge");
+        if (hubSupaBadgeOff) {
+          hubSupaBadgeOff.className = "status-badge sb-out";
+          hubSupaBadgeOff.textContent = t("dbDisconnectedBadge");
         }
         if (logEl) logEl.textContent = customMsg || (currentLang === "en" ? "Status: Running on local storage (Supabase not connected)" : "நிலை: உள்ளூர் சேமிப்பில் இயங்குகிறது (சூப்பபேஸ் இணைக்கப்படவில்லை)");
       }
@@ -4116,11 +5095,12 @@ CREATE POLICY "Valid ledger rows access"
       }
     }
 
-    function disconnectSupabase() {
+    async function disconnectSupabase() {
       const msg = currentLang === "en"
         ? "Disconnect Supabase? (Local records will remain safe)"
         : "சூப்பபேஸ் இணைப்பைத் துண்டிக்கவா? (உள்ளூர் கணக்குகள் அழியாது)";
-      if (!confirm(msg)) return;
+      const ok = await showWebConfirm(msg, { danger: true });
+      if (!ok) return;
       safeStorageRemove(localStorage, SUPA_KEY);
       loadSupaSettingsUI();
       updateDbStatusUI("offline");
@@ -4323,12 +5303,16 @@ CREATE POLICY "Valid ledger rows access"
       document.getElementById("appShell").style.display = "block";
 
       const loginCfg = getSimpleLoginConfig();
+      const customBrand = getCustomBrandConfig();
       if (loginCfg) {
         document.getElementById("cfgOfficeSub").value = loginCfg.officeSub || "";
         document.getElementById("cfgUserName").value = loginCfg.username || "";
         document.getElementById("cfgUserPass").value = loginCfg.password || "";
       }
+      const brandNameEl = document.getElementById("cfgBrandName");
+      if (brandNameEl) brandNameEl.value = customBrand.brandName || "";
       applyOfficeTaglineToPrint();
+      applyCustomBrandingToUI();
       loadSupaSettingsUI();
 
       const today = getToday();
@@ -4446,8 +5430,38 @@ CREATE POLICY "Valid ledger rows access"
 
       if (viewKey === "denom") renderDenomTable();
       if (viewKey === "history") renderHistory();
+      if (viewKey === "settings") backToSettingsHub();
 
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openSettingsSubView(subKey) {
+      const hub = document.getElementById("settingsHubPanel");
+      const subCompany = document.getElementById("settingsSub_company");
+      const subSupa = document.getElementById("settingsSub_supabase");
+      const subBackup = document.getElementById("settingsSub_backup");
+
+      if (hub) hub.style.display = "none";
+      if (subCompany) subCompany.style.display = subKey === "company" ? "block" : "none";
+      if (subSupa) subSupa.style.display = subKey === "supabase" ? "block" : "none";
+      if (subBackup) subBackup.style.display = subKey === "backup" ? "block" : "none";
+
+      if (subKey === "company") {
+        applyCustomBrandingToUI();
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function backToSettingsHub() {
+      const hub = document.getElementById("settingsHubPanel");
+      const subCompany = document.getElementById("settingsSub_company");
+      const subSupa = document.getElementById("settingsSub_supabase");
+      const subBackup = document.getElementById("settingsSub_backup");
+
+      if (hub) hub.style.display = "block";
+      if (subCompany) subCompany.style.display = "none";
+      if (subSupa) subSupa.style.display = "none";
+      if (subBackup) subBackup.style.display = "none";
     }
 
     /* ================= வரவு (பச்சை) & செலவு (சிவப்பு) பட்டியல் ================= */
@@ -4482,6 +5496,7 @@ CREATE POLICY "Valid ledger rows access"
         `;
         tbody.appendChild(tr);
       });
+      applyPastDateLockState();
     }
 
     function appendRow(type) {
@@ -4569,6 +5584,7 @@ CREATE POLICY "Valid ledger rows access"
       renderSubTable("expenses");
       recalcLedger(false);
       renderDenomTable();
+      applyPastDateLockState(targetDate);
     }
 
     function captureForm() {
@@ -4702,19 +5718,20 @@ CREATE POLICY "Valid ledger rows access"
       }
     }
 
-    function clearTodayLedger() {
+    async function clearTodayLedger() {
       const targetDt = loadedLedgerDate || document.getElementById("ledgerDate").value || getToday();
       const q = currentLang === "en"
         ? `Clear all values on ${fmtDateTA(targetDt)}?`
         : `${fmtDateTA(targetDt)} படிவத்தில் உள்ள எண்களைத் துடைத்து வெற்றுப் படிவமாக்கவா?`;
-      if (!confirm(q)) return;
+      const ok = await showWebConfirm(q, { danger: true });
+      if (!ok) return;
       fillForm(createBlankLedgerState(), targetDt);
       persistCurrent();
       showToast(currentLang === "en" ? "Form cleared" : "படிவம் துடைக்கப்பட்டது");
     }
 
     /* ================= நேர மண்டலப் பிழையற்ற அடுத்த நாள் கணக்கு ================= */
-    function carryToNextDay() {
+    async function carryToNextDay() {
       const currentDt = loadedLedgerDate || document.getElementById("ledgerDate").value || getToday();
       if (!isValidISODate(currentDt)) return;
 
@@ -4725,7 +5742,7 @@ CREATE POLICY "Valid ledger rows access"
 
       const db = loadDB();
       if (db[nextDate]) {
-        const okUpdate = confirm(
+        const okUpdate = await showWebConfirm(
           currentLang === "en"
             ? `Record already exists for ${fmtDateTA(nextDate)}.\nUpdate only its Opening Balance to ₹ ${fmt(n.closing)}?`
             : `${fmtDateTA(nextDate)} தேதியில் ஏற்கனவே கணக்கு உள்ளது.\nஅதன் முன் இருப்பை மட்டும் ₹ ${fmt(n.closing)} ஆக மாற்றவா?`
@@ -4802,6 +5819,7 @@ CREATE POLICY "Valid ledger rows access"
 
     window.addEventListener("afterprint", () => {
       document.body.classList.remove("print-history-mode");
+      document.body.classList.remove("print-receipt-mode");
     });
 
     function buildTextSummary() {
@@ -5093,7 +6111,7 @@ CREATE POLICY "Valid ledger rows access"
       );
     }
 
-    function removeCustomCategory(catId) {
+    async function removeCustomCategory(catId) {
       const cats = loadCustomCategories();
       const target = cats.find(c => c.id === catId);
       if (!target) return;
@@ -5101,7 +6119,8 @@ CREATE POLICY "Valid ledger rows access"
       const q = currentLang === "en"
         ? `Remove category "${target.name}"?`
         : `"${target.name}" வகையை நீக்கவா?`;
-      if (!confirm(q)) return;
+      const ok = await showWebConfirm(q, { danger: true });
+      if (!ok) return;
 
       const updated = cats.filter(c => c.id !== catId);
       const sel = document.getElementById("histTypeFilter");
@@ -5324,7 +6343,6 @@ CREATE POLICY "Valid ledger rows access"
       });
       const latestClosing = finalDates.length > 0 ? computeNumbers(db[finalDates[0]]).closing : 0;
       const earliestOpening = finalDates.length > 0 ? computeNumbers(db[finalDates[finalDates.length - 1]]).opening : 0;
-      document.getElementById("printHistTotalCol").textContent = `₹ ${fmt(totalCol)}`;
 
       const dFoot = document.getElementById("histDailyFoot");
       if (finalDates.length === 0) {
@@ -5348,6 +6366,7 @@ CREATE POLICY "Valid ledger rows access"
               <button type="button" class="btn btn-white" style="padding:4px 8px; min-height:30px; font-size:12px;" onclick="openRecordModal('${dt}')">${esc(t("btnView"))}</button>
               <button type="button" class="btn btn-primary" style="padding:4px 8px; min-height:30px; font-size:12px;" onclick="loadDateRecord('${dt}')">${esc(t("btnEdit"))}</button>
               <button type="button" class="btn btn-rose-outline" style="padding:4px 8px; min-height:30px; font-size:12px;" onclick="deleteDateRecord('${dt}')">${esc(t("btnDelete"))}</button>
+              <button type="button" class="btn btn-emerald" style="padding:4px 8px; min-height:30px; font-size:12px;" onclick="openReceiptModal('${dt}')">${esc(t("btnReceipt"))}</button>
             </td>
           `;
           dBody.appendChild(tr);
@@ -5542,7 +6561,8 @@ CREATE POLICY "Valid ledger rows access"
       const q = currentLang === "en"
         ? `Permanently delete record for ${fmtDateTA(dt)}?`
         : `${fmtDateTA(dt)} தேதியின் கணக்கை நிரந்தரமாக நீக்கவா?`;
-      if (!confirm(q)) return;
+      const ok = await showWebConfirm(q, { danger: true });
+      if (!ok) return;
 
       const db = loadDB();
       delete db[dt];
@@ -5608,7 +6628,560 @@ CREATE POLICY "Valid ledger rows access"
       document.getElementById("detailModal").classList.add("open");
     }
 
+    /* ================= ரசீது (Receipt) உருவாக்கம் & நாட்கள் கணக்கீடு ================= */
+    let activeReceiptDate = "";
+    let receiptExcludedIndices = new Set();
+
+    function calcDaysElapsed(fromISO, toISO) {
+      if (!isValidISODate(fromISO) || !isValidISODate(toISO)) return 0;
+      const [fy, fm, fd] = fromISO.split("-").map(Number);
+      const [ty, tm, td] = toISO.split("-").map(Number);
+      const fromUTC = Date.UTC(fy, fm - 1, fd);
+      const toUTC = Date.UTC(ty, tm - 1, td);
+      const diff = Math.floor((toUTC - fromUTC) / (1000 * 60 * 60 * 24));
+      return diff > 0 ? diff : 0;
+    }
+
+    function formatDaysElapsedLabel(daysCount) {
+      if (daysCount === 0) {
+        return `0 ${t("rcpDayPlural")} (${t("rcpTodayTag")})`;
+      }
+      if (daysCount === 1) {
+        return `1 ${t("rcpDaySingular")}`;
+      }
+      return `${daysCount} ${t("rcpDayPlural")}`;
+    }
+
+    function isWeeklyReceiptEnabled() {
+      const wChk = document.getElementById("receiptWeeklyChk");
+      return Boolean(wChk && wChk.checked);
+    }
+
+    function toggleReceiptWeeklyMode() {
+      const enabled = isWeeklyReceiptEnabled();
+      const box = document.getElementById("receiptWeeklyManualBox");
+      const modeSel = document.getElementById("receiptWeekFractionMode");
+      const manInp = document.getElementById("receiptManualWeekVal");
+      const thEl = document.getElementById("receiptDurationTh");
+
+      if (box) {
+        box.classList.toggle("open", enabled);
+      }
+      const isManual = enabled && modeSel && modeSel.value === "manual";
+      if (manInp) {
+        manInp.style.display = isManual ? "block" : "none";
+      }
+      if (thEl) {
+        thEl.textContent = enabled ? t("rcpColWeek") : t("rcpColDays");
+      }
+      renderReceiptBody();
+    }
+
+    function formatDurationCellForReceipt(daysCount) {
+      if (!isWeeklyReceiptEnabled()) {
+        return formatDaysElapsedLabel(daysCount);
+      }
+      const modeSel = document.getElementById("receiptWeekFractionMode");
+      const manInp = document.getElementById("receiptManualWeekVal");
+
+      if (modeSel && modeSel.value === "manual") {
+        const rawMan = manInp ? manInp.value.trim() : "";
+        if (rawMan !== "") {
+          const parsedManual = Number(rawMan);
+          if (Number.isFinite(parsedManual)) {
+            const cleanNum = Number.isInteger(parsedManual)
+              ? String(parsedManual)
+              : String(Math.round(parsedManual * 100) / 100);
+            const unit = parsedManual === 1 ? t("rcpWeekSingular") : t("rcpWeekPlural");
+            return `${cleanNum} ${unit}`;
+          }
+        }
+        return `— ${t("rcpWeekPlural")}`;
+      }
+
+      if (daysCount === 0) {
+        return `0 ${t("rcpWeekPlural")} (${t("rcpTodayTag")})`;
+      }
+      if (daysCount % 7 === 0) {
+        const exactWeeks = daysCount / 7;
+        const unit = exactWeeks === 1 ? t("rcpWeekSingular") : t("rcpWeekPlural");
+        return `${exactWeeks} ${unit}`;
+      }
+      const decWeeks = Math.round((daysCount / 7) * 100) / 100;
+      return `${decWeeks} ${t("rcpWeekPlural")}`;
+    }
+
+    function toggleReceiptSignature() {
+      const signChk = document.getElementById("receiptSignChk");
+      const signRow = document.getElementById("receiptSignRow");
+      if (signRow) {
+        signRow.style.display = (signChk && signChk.checked) ? "flex" : "none";
+      }
+    }
+
+    function toggleReceiptInterestManual() {
+      const intChk = document.getElementById("receiptInterestChk");
+      const intBox = document.getElementById("receiptInterestManualBox");
+      const enabled = Boolean(intChk && intChk.checked);
+      if (intBox) {
+        intBox.classList.toggle("open", enabled);
+      }
+      if (enabled) {
+        const amtInp = document.getElementById("receiptInterestAmt");
+        if (amtInp) setTimeout(() => amtInp.focus(), 50);
+      }
+      renderReceiptBody();
+    }
+
+    function openReceiptModal(dt) {
+      const db = loadDB();
+      if (!db[dt]) return;
+      activeReceiptDate = dt;
+      receiptExcludedIndices = new Set();
+
+      const scopeEl = document.getElementById("receiptScopeFilter");
+      const toDateEl = document.getElementById("receiptToDate");
+      const custNameEl = document.getElementById("receiptCustName");
+      const custPhoneEl = document.getElementById("receiptCustPhone");
+      const noteEl = document.getElementById("receiptExtraNote");
+      const signChk = document.getElementById("receiptSignChk");
+      const intChk = document.getElementById("receiptInterestChk");
+      const intLbl = document.getElementById("receiptInterestLabel");
+      const intAmt = document.getElementById("receiptInterestAmt");
+      const wChk = document.getElementById("receiptWeeklyChk");
+      const wMode = document.getElementById("receiptWeekFractionMode");
+      const wMan = document.getElementById("receiptManualWeekVal");
+
+      if (scopeEl) scopeEl.value = "all";
+      if (toDateEl) toDateEl.value = getToday();
+      if (custNameEl) custNameEl.value = "";
+      if (custPhoneEl) custPhoneEl.value = "";
+      if (noteEl) noteEl.value = "";
+      if (signChk) signChk.checked = true;
+      if (intChk) intChk.checked = false;
+      if (intLbl) intLbl.value = "";
+      if (intAmt) intAmt.value = "";
+      if (wChk) wChk.checked = false;
+      if (wMode) wMode.value = "decimal";
+      if (wMan) wMan.value = "";
+
+      toggleReceiptSignature();
+      toggleReceiptInterestManual();
+      toggleReceiptWeeklyMode();
+
+      const cfg = getSimpleLoginConfig();
+      const subEl = document.getElementById("receiptOfficeSub");
+      if (subEl) subEl.textContent = (cfg && cfg.officeSub) ? cfg.officeSub : "";
+
+      const noEl = document.getElementById("receiptNoVal");
+      if (noEl) noEl.textContent = `No: RCP-${String(dt).replace(/-/g, "")}`;
+
+      renderReceiptBody();
+      document.getElementById("receiptModal").classList.add("open");
+    }
+
+    function toggleReceiptRowCheck(idx, checked) {
+      if (checked) {
+        receiptExcludedIndices.delete(idx);
+      } else {
+        receiptExcludedIndices.add(idx);
+      }
+      renderReceiptBody();
+    }
+
+    function updateReceiptMetaDisplay() {
+      const toDateVal = (document.getElementById("receiptToDate").value || getToday());
+      const todayEl = document.getElementById("receiptTodayVal");
+      if (todayEl) {
+        todayEl.textContent = `${t("dateLbl")}: ${fmtDateTA(toDateVal)}`;
+      }
+
+      const cName = (document.getElementById("receiptCustName").value || "").trim();
+      const cPhone = (document.getElementById("receiptCustPhone").value || "").trim();
+      const custRow = document.getElementById("receiptCustDisplayRow");
+      const custVal = document.getElementById("receiptCustDisplayVal");
+      if (custRow && custVal) {
+        if (cName || cPhone) {
+          const parts = [];
+          if (cName) parts.push(`${t("rcpCustLbl")}: ${cName}`);
+          if (cPhone) parts.push(`${t("rcpPhoneLbl")}: ${cPhone}`);
+          custVal.textContent = parts.join("   |   ");
+          custRow.style.display = "flex";
+        } else {
+          custRow.style.display = "none";
+        }
+      }
+
+      const noteTxt = (document.getElementById("receiptExtraNote").value || "").trim();
+      const noteBox = document.getElementById("receiptNoteDisplay");
+      if (noteBox) {
+        if (noteTxt) {
+          noteBox.textContent = `${t("remarksSummaryLbl")}: ${noteTxt}`;
+          noteBox.style.display = "block";
+        } else {
+          noteBox.style.display = "none";
+        }
+      }
+    }
+
+    function buildReceiptItemsList(dt, scope) {
+      const db = loadDB();
+      const r = db[dt];
+      if (!r) return [];
+      const n = computeNumbers(r);
+      const items = [];
+
+      if (scope === "all" || scope === "income") {
+        (r.collections || []).forEach(c => {
+          if (Number(c.amount) > 0 || (c.name && c.name.trim())) {
+            items.push({
+              date: dt,
+              name: (c.name || "").trim() || t("rowCollection"),
+              amt: Number(c.amount) || 0,
+              isIncome: true
+            });
+          }
+        });
+        if (n.eduppu > 0) {
+          items.push({ date: dt, name: t("rowEduppu"), amt: n.eduppu, isIncome: true });
+        }
+        if (n.extra > 0) {
+          items.push({
+            date: dt,
+            name: (r.extraCreditLabel || "").trim() || t("extraSummaryLbl"),
+            amt: n.extra,
+            isIncome: true
+          });
+        }
+      }
+
+      if (scope === "all" || scope === "expense") {
+        if (n.adappu > 0) {
+          items.push({ date: dt, name: t("rowAdappu"), amt: n.adappu, isIncome: false });
+        }
+        (r.expenses || []).forEach(e => {
+          if (Number(e.amount) > 0 || (e.name && e.name.trim())) {
+            items.push({
+              date: dt,
+              name: (e.name || "").trim() || t("rowExpense"),
+              amt: Number(e.amount) || 0,
+              isIncome: false
+            });
+          }
+        });
+        if (n.person > 0) {
+          items.push({
+            date: dt,
+            name: (r.personLabel || "ராஜேஷ்").trim(),
+            amt: n.person,
+            isIncome: false
+          });
+        }
+      }
+
+      return items;
+    }
+
+    function getManualInterestState() {
+      const intChk = document.getElementById("receiptInterestChk");
+      const enabled = Boolean(intChk && intChk.checked);
+      const rawLbl = (document.getElementById("receiptInterestLabel").value || "").trim();
+      const rawAmt = Number(document.getElementById("receiptInterestAmt").value) || 0;
+      return {
+        enabled,
+        label: rawLbl || t("rcpInterestDefaultLbl"),
+        amount: enabled ? rawAmt : 0
+      };
+    }
+
+    function renderReceiptBody() {
+      if (!activeReceiptDate) return;
+      const scope = document.getElementById("receiptScopeFilter").value || "all";
+      const toDateVal = document.getElementById("receiptToDate").value || getToday();
+      updateReceiptMetaDisplay();
+
+      const items = buildReceiptItemsList(activeReceiptDate, scope);
+      const tbody = document.getElementById("receiptTableBody");
+      const tfoot = document.getElementById("receiptTableFoot");
+      tbody.innerHTML = "";
+
+      if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--text-muted);">${esc(t("rcpNoItems"))}</td></tr>`;
+        tfoot.innerHTML = "";
+        return;
+      }
+
+      let serialNo = 0;
+      let totalSelectedAmt = 0;
+
+      items.forEach((it, idx) => {
+        const isChecked = !receiptExcludedIndices.has(idx);
+        const daysCount = calcDaysElapsed(it.date, toDateVal);
+        const daysLabel = formatDurationCellForReceipt(daysCount);
+        const amtCls = it.isIncome ? "inc-text" : "exp-text";
+
+        if (isChecked) {
+          serialNo += 1;
+          totalSelectedAmt += it.amt;
+        }
+
+        const tr = document.createElement("tr");
+        if (!isChecked) {
+          tr.classList.add("receipt-no-print");
+          tr.style.opacity = "0.45";
+        }
+
+        tr.innerHTML = `
+          <td class="receipt-no-print" style="text-align:center;">
+            <input type="checkbox" ${isChecked ? "checked" : ""} onchange="toggleReceiptRowCheck(${idx}, this.checked)" />
+          </td>
+          <td style="text-align:center; font-weight:700;">${isChecked ? serialNo : "—"}</td>
+          <td style="font-weight:600; white-space:nowrap;">${fmtDateTA(it.date)}</td>
+          <td class="${amtCls}">${esc(it.name)}</td>
+          <td class="align-r ${amtCls}">₹ ${fmt(it.amt)}</td>
+          <td style="text-align:center;"><span class="days-pill">${esc(daysLabel)}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const intState = getManualInterestState();
+      const footColorCls = scope === "income" ? "inc-text" : (scope === "expense" ? "exp-text" : "");
+
+      let footRows = `
+        <tr>
+          <td class="receipt-no-print"></td>
+          <td colspan="3" style="text-align:right;">${esc(t("histGrandAmountLbl"))} (${serialNo}):</td>
+          <td class="align-r ${footColorCls}">₹ ${fmt(totalSelectedAmt)}</td>
+          <td></td>
+        </tr>
+      `;
+
+      if (intState.enabled) {
+        const netWithInterest = totalSelectedAmt + intState.amount;
+        footRows += `
+          <tr>
+            <td class="receipt-no-print"></td>
+            <td colspan="3" style="text-align:right; color:var(--corp-gold);">${esc(intState.label)}:</td>
+            <td class="align-r" style="color:var(--corp-gold);">₹ ${fmt(intState.amount)}</td>
+            <td></td>
+          </tr>
+          <tr style="background: var(--corp-blue-soft);">
+            <td class="receipt-no-print"></td>
+            <td colspan="3" style="text-align:right; color:var(--corp-blue); font-size:15px;">${esc(t("rcpNetPayableLbl"))}:</td>
+            <td class="align-r" style="color:var(--corp-blue); font-size:15.5px;">₹ ${fmt(netWithInterest)}</td>
+            <td></td>
+          </tr>
+        `;
+      }
+
+      tfoot.innerHTML = footRows;
+    }
+
+    function buildReceiptShareText() {
+      const scope = document.getElementById("receiptScopeFilter").value || "all";
+      const toDateVal = document.getElementById("receiptToDate").value || getToday();
+      const cName = (document.getElementById("receiptCustName").value || "").trim();
+      const noteTxt = (document.getElementById("receiptExtraNote").value || "").trim();
+      const items = buildReceiptItemsList(activeReceiptDate, scope);
+      const intState = getManualInterestState();
+
+      const lines = [
+        t("rcpLine1U"),
+        t("rcpLine2Sivamayam"),
+        `*${t("brandName")}*`,
+        `${t("rcpOfficialBadge")} (No: RCP-${String(activeReceiptDate).replace(/-/g, "")})`,
+        `${t("rcpTodayLbl")} ${fmtDateTA(toDateVal)}`
+      ];
+
+      if (cName) lines.push(`${t("rcpCustLbl")}: ${cName}`);
+      lines.push("------------------------");
+
+      let sno = 0;
+      let totalAmt = 0;
+      items.forEach((it, idx) => {
+        if (receiptExcludedIndices.has(idx)) return;
+        sno += 1;
+        totalAmt += it.amt;
+        const dCount = calcDaysElapsed(it.date, toDateVal);
+        const dStr = formatDurationCellForReceipt(dCount);
+        lines.push(`${sno}. ${fmtDateTA(it.date)} | ${it.name} | ₹ ${fmt(it.amt)} (${dStr})`);
+      });
+
+      lines.push("------------------------");
+      lines.push(`${t("histGrandAmountLbl")} : ₹ ${fmt(totalAmt)}`);
+      if (intState.enabled) {
+        lines.push(`${intState.label} : ₹ ${fmt(intState.amount)}`);
+        lines.push(`*${t("rcpNetPayableLbl")} : ₹ ${fmt(totalAmt + intState.amount)}*`);
+      }
+      if (noteTxt) lines.push(`${t("remarksSummaryLbl")}: ${noteTxt}`);
+      return lines.join("\n");
+    }
+
+    function printReceiptPDF() {
+      toggleReceiptSignature();
+      document.body.classList.remove("print-history-mode");
+      document.body.classList.add("print-receipt-mode");
+      setTimeout(() => {
+        window.print();
+        setTimeout(() => document.body.classList.remove("print-receipt-mode"), 400);
+      }, 120);
+    }
+
+    function shareReceiptWhatsApp() {
+      const txt = buildReceiptShareText();
+      const rawPhone = (document.getElementById("receiptCustPhone").value || "").replace(/\D/g, "");
+      let phoneParam = "";
+      if (rawPhone.length === 10) {
+        phoneParam = `91${rawPhone}`;
+      } else if (rawPhone.length > 10) {
+        phoneParam = rawPhone;
+      }
+      const url = phoneParam
+        ? `https://wa.me/${phoneParam}?text=${encodeURIComponent(txt)}`
+        : `https://wa.me/?text=${encodeURIComponent(txt)}`;
+      window.open(url, "_blank");
+    }
+
+    function copyReceiptText() {
+      const txt = buildReceiptShareText().replace(/\*/g, "");
+      navigator.clipboard.writeText(txt).then(() => {
+        showToast(currentLang === "en" ? "Receipt copied!" : "ரசீது விவரம் நகலெடுக்கப்பட்டது!");
+      }).catch(() => {
+        showToast(currentLang === "en" ? "Copy failed" : "நகலெடுப்பதில் சிக்கல் ஏற்பட்டது");
+      });
+    }
+
+    /* ================= தனிப்பயன் உறுதிப்படுத்தல் சாளரம் & பழைய தேதி பூட்டு ================= */
+    let _pendingConfirmResolver = null;
+    let unlockedPastDates = new Set();
+
+    function showWebConfirm(message, opts = {}) {
+      return new Promise(resolve => {
+        _pendingConfirmResolver = resolve;
+        const titleEl = document.getElementById("customConfirmTitle");
+        const msgEl = document.getElementById("customConfirmMessage");
+        const okBtn = document.getElementById("btnConfirmOk");
+
+        if (titleEl) {
+          titleEl.textContent = opts.title || t("confirmDialogTitle");
+        }
+        if (msgEl) {
+          msgEl.textContent = message;
+        }
+        if (okBtn) {
+          okBtn.className = opts.danger ? "btn btn-rose-outline" : "btn btn-primary";
+          okBtn.textContent = opts.okLabel || t("btnConfirmOk");
+        }
+
+        document.getElementById("customConfirmModal").classList.add("open");
+        if (okBtn) setTimeout(() => okBtn.focus(), 50);
+      });
+    }
+
+    function resolveCustomConfirm(accepted) {
+      const modal = document.getElementById("customConfirmModal");
+      if (modal) modal.classList.remove("open");
+      const resolver = _pendingConfirmResolver;
+      _pendingConfirmResolver = null;
+      if (typeof resolver === "function") {
+        resolver(Boolean(accepted));
+      }
+    }
+
+    function isPastLedgerDate(dt) {
+      if (!isValidISODate(dt)) return false;
+      return dt < getToday();
+    }
+
+    function isDateCurrentlyLocked(dt) {
+      if (!isPastLedgerDate(dt)) return false;
+      return !unlockedPastDates.has(dt);
+    }
+
+    function applyPastDateLockState(dt) {
+      const activeDt = dt || loadedLedgerDate || document.getElementById("ledgerDate").value || getToday();
+      const isPast = isPastLedgerDate(activeDt);
+      const isLocked = isDateCurrentlyLocked(activeDt);
+
+      const banner = document.getElementById("pastDateLockBanner");
+      const lockTxt = document.getElementById("pastDateLockText");
+      const toggleBtn = document.getElementById("btnTogglePastLock");
+      const ledgerView = document.getElementById("ledgerView");
+
+      if (ledgerView) {
+        ledgerView.classList.toggle("ledger-locked-active", isLocked);
+      }
+
+      const lockFieldIds = [
+        "openingBalance",
+        "eduppuAmount",
+        "extraCreditLabel",
+        "extraCreditAmount",
+        "adappuAmount",
+        "personLabel",
+        "personAmount",
+        "dailyRemarks",
+        "upiAmountInput"
+      ];
+      lockFieldIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.readOnly = isLocked;
+      });
+
+      document.querySelectorAll("#collectionsTbody input, #expensesTbody input, #denomTbody input").forEach(inp => {
+        inp.readOnly = isLocked;
+      });
+
+      if (!banner) return;
+      if (!isPast) {
+        banner.classList.remove("active", "unlocked");
+        return;
+      }
+
+      banner.classList.add("active");
+      banner.classList.toggle("unlocked", !isLocked);
+
+      if (lockTxt) {
+        lockTxt.textContent = isLocked
+          ? `${t("pastDateLockedMsg")} (${fmtDateTA(activeDt)})`
+          : `${t("pastDateUnlockedMsg")} (${fmtDateTA(activeDt)})`;
+      }
+      if (toggleBtn) {
+        toggleBtn.textContent = isLocked ? t("btnUnlockPastDate") : t("btnLockPastDate");
+        toggleBtn.className = isLocked ? "btn btn-gold-outline" : "btn btn-emerald";
+      }
+    }
+
+    async function togglePastDateLock() {
+      const activeDt = loadedLedgerDate || document.getElementById("ledgerDate").value;
+      if (!isPastLedgerDate(activeDt)) return;
+
+      if (unlockedPastDates.has(activeDt)) {
+        unlockedPastDates.delete(activeDt);
+        applyPastDateLockState(activeDt);
+        showToast(currentLang === "en" ? "Past date locked" : "பழைய தேதி மீண்டும் பூட்டப்பட்டது");
+        return;
+      }
+
+      const warnMsg = currentLang === "en"
+        ? `This record is from a past date (${fmtDateTA(activeDt)}).
+Are you sure you want to unlock and edit it?`
+        : `இது பழைய தேதியின் கணக்கு (${fmtDateTA(activeDt)}).
+இதைத் திறந்து திருத்த விரும்புகிறீர்களா?`;
+
+      const ok = await showWebConfirm(warnMsg, { title: t("pastDateWarnTitle") });
+      if (!ok) return;
+
+      unlockedPastDates.add(activeDt);
+      applyPastDateLockState(activeDt);
+      showToast(currentLang === "en" ? "Editing unlocked for past date" : "பழைய தேதியைத் திருத்த அனுமதி வழங்கப்பட்டது");
+    }
+
     function closeModal(id) {
+      if (id === "customConfirmModal") {
+        resolveCustomConfirm(false);
+        return;
+      }
       document.getElementById(id).classList.remove("open");
     }
 
@@ -5995,8 +7568,99 @@ CREATE POLICY "Valid ledger rows access"
       reader.readAsText(file);
     }
 
+    const DEFAULT_LOGO_SVGS = {};
+
+    function captureDefaultLogoSlots() {
+      document.querySelectorAll("[data-brand-logo-slot]").forEach(slot => {
+        const key = slot.getAttribute("data-brand-logo-slot");
+        if (key && !(key in DEFAULT_LOGO_SVGS)) {
+          DEFAULT_LOGO_SVGS[key] = slot.innerHTML;
+        }
+      });
+    }
+
+    function applyCustomBrandingToUI() {
+      const cb = getCustomBrandConfig();
+      const effectiveName = cb.brandName || ((I18N[currentLang] && I18N[currentLang].brandName) || I18N.ta.brandName);
+
+      document.querySelectorAll('[data-i18n="brandName"]').forEach(el => {
+        el.textContent = effectiveName;
+      });
+
+      const slotSizes = {
+        "login": 64,
+        "header": 30,
+        "ledger-print": 38,
+        "hist-print": 38,
+        "receipt": 46
+      };
+
+      document.querySelectorAll("[data-brand-logo-slot]").forEach(slot => {
+        const key = slot.getAttribute("data-brand-logo-slot");
+        if (cb.logoDataUrl) {
+          const px = slotSizes[key] || 38;
+          slot.innerHTML = `<img src="${cb.logoDataUrl}" alt="${esc(effectiveName)}" class="custom-brand-img" style="width:${px}px; height:${px}px;" />`;
+        } else if (DEFAULT_LOGO_SVGS[key]) {
+          slot.innerHTML = DEFAULT_LOGO_SVGS[key];
+        }
+      });
+
+      const prevWrap = document.getElementById("cfgLogoPreviewWrap");
+      if (prevWrap) {
+        if (cb.logoDataUrl) {
+          prevWrap.innerHTML = `<img src="${cb.logoDataUrl}" alt="${esc(effectiveName)}" class="brand-logo-preview-img" />`;
+        } else {
+          prevWrap.innerHTML = `<div class="brand-logo-preview-img" style="display:flex;align-items:center;justify-content:center;">${DEFAULT_LOGO_SVGS["header"] || ""}</div>`;
+        }
+      }
+    }
+
+    function onCustomLogoUpload(e) {
+      const inputEl = e.target;
+      const file = inputEl.files && inputEl.files[0];
+      if (!file) return;
+
+      if (file.size > 1024 * 1024) {
+        showToast(t("logoSizeErrToast"));
+        inputEl.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (ev) {
+        const dataUrl = String(ev.target.result || "");
+        if (!/^data:image\/(png|jpeg|jpg|webp|svg\+xml);base64,/.test(dataUrl)) {
+          showToast(currentLang === "en" ? "Unsupported image format!" : "ஆதரிக்கப்படாத பட வடிவம்!");
+          inputEl.value = "";
+          return;
+        }
+        const curBrand = getCustomBrandConfig();
+        safeStorageSet(localStorage, CUSTOM_BRAND_KEY, JSON.stringify({
+          brandName: curBrand.brandName,
+          logoDataUrl: dataUrl
+        }));
+        applyCustomBrandingToUI();
+        showToast(t("logoUpdatedToast"));
+        inputEl.value = "";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function resetCustomBrandLogo() {
+      const curBrand = getCustomBrandConfig();
+      safeStorageSet(localStorage, CUSTOM_BRAND_KEY, JSON.stringify({
+        brandName: curBrand.brandName,
+        logoDataUrl: ""
+      }));
+      const fileInp = document.getElementById("cfgLogoFile");
+      if (fileInp) fileInp.value = "";
+      applyCustomBrandingToUI();
+      showToast(t("logoResetToast"));
+    }
+
     /* ================= தொடக்க நிலை ================= */
     (function init() {
+      captureDefaultLogoSlots();
       const savedLang = safeStorageGet(localStorage, LANG_KEY);
       if (savedLang === "en" || savedLang === "ta") {
         currentLang = savedLang;
@@ -6014,6 +7678,50 @@ CREATE POLICY "Valid ledger rows access"
         document.getElementById("loginScreen").style.display = "flex";
         document.getElementById("appShell").style.display = "none";
       }
+
+      document.addEventListener("beforeinput", function (ev) {
+        const inp = ev.target;
+        if (inp && inp.readOnly && inp.closest("#ledgerView") && isDateCurrentlyLocked(loadedLedgerDate)) {
+          ev.preventDefault();
+          showToast(t("pastDateLockedMsg"));
+        }
+      });
+
+      document.addEventListener("keydown", function (ev) {
+        if (ev.key === "ArrowUp" || ev.key === "ArrowDown") {
+          const numTarget = ev.target;
+          if (numTarget && numTarget.tagName === "INPUT" && numTarget.type === "number") {
+            ev.preventDefault();
+            return;
+          }
+        }
+        if (ev.key !== "Enter") return;
+        const target = ev.target;
+        if (!target || target.tagName !== "INPUT" || target.type !== "number") return;
+        const modalMask = target.closest(".modal-mask");
+        if (modalMask && modalMask.id === "receiptModal") {
+          ev.preventDefault();
+          renderReceiptBody();
+          target.blur();
+          return;
+        }
+        ev.preventDefault();
+        const section = target.closest(".page-view") || document.getElementById("appShell");
+        if (section) {
+          const focusables = Array.from(
+            section.querySelectorAll('input:not([type="hidden"]):not([disabled]), select:not([disabled])')
+          ).filter(el => el.offsetParent !== null);
+          const idx = focusables.indexOf(target);
+          if (idx >= 0 && idx + 1 < focusables.length) {
+            focusables[idx + 1].focus();
+            if (typeof focusables[idx + 1].select === "function") {
+              focusables[idx + 1].select();
+            }
+            return;
+          }
+        }
+        target.blur();
+      });
     })();
   </script>
 </body>
