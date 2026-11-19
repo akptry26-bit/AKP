@@ -3194,10 +3194,10 @@
             <div class="toolbar-btns">
               <button type="button" class="btn btn-primary" onclick="manualSave()" data-i18n="btnSave">💾 சேமி</button>
               <button type="button" class="btn btn-dark" onclick="exportOnePagePDF()" data-i18n="btnPdf">📄 பிடிஎஃப் / அச்சு</button>
+              <button type="button" class="btn btn-primary" onclick="shareLedgerImage()" data-i18n="btnShareLedgerImg">🖼️ படம் பகிர்</button>
               <button type="button" class="btn btn-wa" onclick="shareWhatsApp()" data-i18n="btnWa">💬 வாட்ஸ்அப்</button>
               <button type="button" class="btn btn-gold-outline" onclick="carryToNextDay()" data-i18n="btnNextDay">➡️ அடுத்த நாள்</button>
               <button type="button" class="btn btn-white" onclick="openCalcModal()" data-i18n="btnCalc">🧮 கால்குலேட்டர்</button>
-              <button type="button" class="btn btn-white" onclick="copyReport()" data-i18n="btnCopy">📋 நகலெடு</button>
             </div>
           </div>
 
@@ -3740,6 +3740,26 @@ CREATE POLICY "Valid ledger rows access"
   WITH CHECK (
     ledger_date ~ '^\d{4}-\d{2}-\d{2}$'
     AND jsonb_typeof(payload) = 'object'
+  );
+
+CREATE TABLE IF NOT EXISTS public.app_config (
+  config_key text PRIMARY KEY,
+  payload jsonb NOT NULL,
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE public.app_config ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow app_config access" ON public.app_config;
+
+CREATE POLICY "Allow app_config access"
+  ON public.app_config
+  FOR ALL
+  TO anon, authenticated
+  USING (config_key ~ '^[a-z0-9_]+$')
+  WITH CHECK (
+    config_key ~ '^[a-z0-9_]+$'
+    AND jsonb_typeof(payload) = 'object'
   );</div>
                 <button type="button" class="btn btn-white" style="margin-top: 6px; padding: 5px 10px; min-height: 30px; font-size: 12px;" onclick="copySqlCode()" data-i18n="btnCopySql">📋 கட்டளையை நகலெடு</button>
               </details>
@@ -4088,6 +4108,9 @@ CREATE POLICY "Valid ledger rows access"
         btnPdf: "📄 பிடிஎஃப் / அச்சு",
         btnHistPdf: "📄 அறிக்கை பிடிஎஃப்",
         btnWa: "💬 வாட்ஸ்அப்",
+        btnShareLedgerImg: "🖼️ படம் பகிர்",
+        ledgerImgSavedToast: "கணக்கு படம் பதிவிறக்கப்பட்டது! வாட்ஸ்அப்பில் பகிரலாம்.",
+        ledgerImgShareErrToast: "கணக்கு படத்தை உருவாக்க முடியவில்லை!",
         btnNextDay: "➡️ அடுத்த நாள்",
         btnCalc: "🧮 கால்குலேட்டர்",
         btnCopy: "📋 நகலெடு",
@@ -4307,6 +4330,9 @@ CREATE POLICY "Valid ledger rows access"
         btnPdf: "📄 PDF / Print",
         btnHistPdf: "📄 Statement PDF",
         btnWa: "💬 WhatsApp",
+        btnShareLedgerImg: "🖼️ Share Image",
+        ledgerImgSavedToast: "Ledger image downloaded! Ready to share.",
+        ledgerImgShareErrToast: "Could not generate ledger image!",
         btnNextDay: "➡️ Next Day",
         btnCalc: "🧮 Calculator",
         btnCopy: "📋 Copy",
@@ -4850,7 +4876,144 @@ CREATE POLICY "Valid ledger rows access"
       updateLoginScreenState();
     }
 
-    function saveSimpleLoginSettings(e) {
+    async function pushLoginConfigToSupabase() {
+      if (!isSupaConfigured()) return { ok: false, skipped: true };
+      const cfg = getSupaConfig();
+      const loginCfg = getSimpleLoginConfig();
+      if (!loginCfg || !loginCfg.password) return { ok: false, skipped: true };
+      const customBrand = getCustomBrandConfig();
+      const nowIso = new Date().toISOString();
+
+      try {
+        const res = await fetch(`${cfg.supaUrl}/rest/v1/app_config?on_conflict=config_key`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": cfg.supaKey,
+            "Authorization": `Bearer ${cfg.supaKey}`,
+            "Prefer": "resolution=merge-duplicates,return=minimal"
+          },
+          body: JSON.stringify([
+            {
+              config_key: "simple_login_cfg",
+              payload: {
+                username: loginCfg.username,
+                password: loginCfg.password,
+                officeSub: loginCfg.officeSub,
+                updatedAt: nowIso
+              },
+              updated_at: nowIso
+            },
+            {
+              config_key: "custom_brand_cfg",
+              payload: {
+                brandName: customBrand.brandName,
+                logoDataUrl: customBrand.logoDataUrl,
+                updatedAt: nowIso
+              },
+              updated_at: nowIso
+            }
+          ])
+        });
+
+        if (!res.ok) {
+          return { ok: false, error: `HTTP ${res.status}` };
+        }
+        return { ok: true };
+      } catch (e) {
+        return { ok: false, error: e && e.message ? e.message : "Network error" };
+      }
+    }
+
+    async function pullLoginConfigFromSupabase() {
+      if (!isSupaConfigured()) return { ok: false };
+      const cfg = getSupaConfig();
+      try {
+        const res = await fetch(
+          `${cfg.supaUrl}/rest/v1/app_config?select=config_key,payload,updated_at`,
+          {
+            headers: {
+              "apikey": cfg.supaKey,
+              "Authorization": `Bearer ${cfg.supaKey}`
+            }
+          }
+        );
+        if (!res.ok) return { ok: false };
+        const rows = await res.json();
+        if (!Array.isArray(rows)) return { ok: false };
+
+        let updatedLogin = false;
+        let updatedBrand = false;
+
+        rows.forEach(item => {
+          if (!item || !item.payload || typeof item.payload !== "object") return;
+          if (item.config_key === "simple_login_cfg") {
+            const p = item.payload;
+            if (typeof p.password === "string" && p.password.length > 0) {
+              const remTime = Date.parse(p.updatedAt || item.updated_at || 0) || 0;
+              const curLogin = getSimpleLoginConfig();
+              const curRaw = safeStorageGet(localStorage, LOGIN_CFG_KEY);
+              let locTime = 0;
+              if (curRaw) {
+                try { locTime = Date.parse(JSON.parse(curRaw).updatedAt || 0) || 0; } catch (e) {}
+              }
+              if (!curLogin || remTime >= locTime) {
+                safeStorageSet(localStorage, LOGIN_CFG_KEY, JSON.stringify({
+                  username: String(p.username || "").trim(),
+                  password: p.password,
+                  officeSub: String(p.officeSub || "").trim(),
+                  updatedAt: p.updatedAt || item.updated_at || new Date().toISOString()
+                }));
+                updatedLogin = true;
+              }
+            }
+          } else if (item.config_key === "custom_brand_cfg") {
+            const p = item.payload;
+            const remTime = Date.parse(p.updatedAt || item.updated_at || 0) || 0;
+            const curRaw = safeStorageGet(localStorage, CUSTOM_BRAND_KEY);
+            let locTime = 0;
+            if (curRaw) {
+              try { locTime = Date.parse(JSON.parse(curRaw).updatedAt || 0) || 0; } catch (e) {}
+            }
+            if (remTime >= locTime) {
+              safeStorageSet(localStorage, CUSTOM_BRAND_KEY, JSON.stringify({
+                brandName: typeof p.brandName === "string" ? p.brandName.trim().slice(0, 100) : "",
+                logoDataUrl: typeof p.logoDataUrl === "string" && /^data:image\/(png|jpeg|jpg|webp|svg\+xml);base64,/.test(p.logoDataUrl)
+                  ? p.logoDataUrl
+                  : "",
+                updatedAt: p.updatedAt || item.updated_at || new Date().toISOString()
+              }));
+              updatedBrand = true;
+            }
+          }
+        });
+
+        if (updatedLogin || updatedBrand) {
+          const loginCfg = getSimpleLoginConfig();
+          const brandCfg = getCustomBrandConfig();
+          if (loginCfg) {
+            const uEl = document.getElementById("cfgUserName");
+            const pEl = document.getElementById("cfgUserPass");
+            const oEl = document.getElementById("cfgOfficeSub");
+            const lNameEl = document.getElementById("loginName");
+            if (uEl) uEl.value = loginCfg.username || "";
+            if (pEl) pEl.value = loginCfg.password || "";
+            if (oEl) oEl.value = loginCfg.officeSub || "";
+            if (lNameEl && loginCfg.username) lNameEl.value = loginCfg.username;
+          }
+          const bEl = document.getElementById("cfgBrandName");
+          if (bEl) bEl.value = brandCfg.brandName || "";
+          applyOfficeTaglineToPrint();
+          applyCustomBrandingToUI();
+          updateLoginScreenState();
+        }
+        return { ok: true };
+      } catch (e) {
+        return { ok: false };
+      }
+    }
+
+    async function saveSimpleLoginSettings(e) {
       e.preventDefault();
       const officeSub = document.getElementById("cfgOfficeSub").value.trim();
       const brandNameInput = (document.getElementById("cfgBrandName").value || "").trim().slice(0, 100);
@@ -4861,15 +5024,24 @@ CREATE POLICY "Valid ledger rows access"
         return;
       }
       const curBrand = getCustomBrandConfig();
+      const nowIso = new Date().toISOString();
       safeStorageSet(localStorage, CUSTOM_BRAND_KEY, JSON.stringify({
         brandName: brandNameInput,
-        logoDataUrl: curBrand.logoDataUrl
+        logoDataUrl: curBrand.logoDataUrl,
+        updatedAt: nowIso
       }));
-      if (safeStorageSet(localStorage, LOGIN_CFG_KEY, JSON.stringify({ username, password, officeSub }))) {
+      if (safeStorageSet(localStorage, LOGIN_CFG_KEY, JSON.stringify({ username, password, officeSub, updatedAt: nowIso }))) {
         applyOfficeTaglineToPrint();
         applyCustomBrandingToUI();
         renderHistory();
         if (activeReceiptDate) renderReceiptBody();
+        if (isSupaConfigured()) {
+          const syncRes = await pushLoginConfigToSupabase();
+          if (syncRes.ok) {
+            showToast(currentLang === "en" ? "Saved & synced across systems!" : "சேமிக்கப்பட்டது & மற்ற கணினிகளிலும் புதுப்பிக்கப்பட்டது!");
+            return;
+          }
+        }
         showToast(currentLang === "en" ? "Details saved!" : "விவரங்கள் சேமிக்கப்பட்டன!");
       }
     }
@@ -5214,6 +5386,7 @@ CREATE POLICY "Valid ledger rows access"
 
       const cfg = getSupaConfig();
       updateDbStatusUI("syncing", currentLang === "en" ? "Status: Fetching from Supabase..." : "நிலை: சூப்பபேசிலிருந்து விவரங்களைப் பெறுகிறது...");
+      await pullLoginConfigFromSupabase();
 
       try {
         const res = await fetch(
@@ -5293,6 +5466,7 @@ CREATE POLICY "Valid ledger rows access"
         showToast(`${currentLang === "en" ? "Sync failed" : "ஒத்திசைவு தோல்வி"}: ${pullRes.error}`);
         return;
       }
+      await pushLoginConfigToSupabase();
       const pushRes = await pushToSupabase(loadDB());
       if (!pushRes.ok) {
         showToast(`${currentLang === "en" ? "Save failed" : "சேமிப்பு தோல்வி"}: ${pushRes.error}`);
@@ -5888,13 +6062,256 @@ CREATE POLICY "Valid ledger rows access"
       return lines.join("\n");
     }
 
-    function copyReport() {
-      const txt = buildTextSummary().replace(/\*/g, "");
-      navigator.clipboard.writeText(txt).then(() => {
-        showToast(currentLang === "en" ? "Summary copied!" : "கணக்கு விவரம் நகலெடுக்கப்பட்டது!");
-      }).catch(() => {
-        showToast(currentLang === "en" ? "Copy failed" : "நகலெடுப்பதில் சிக்கல் ஏற்பட்டது");
+    function renderLedgerToCanvas() {
+      const activeDt = loadedLedgerDate || document.getElementById("ledgerDate").value || getToday();
+      const cur = captureForm();
+      const n = computeNumbers(cur);
+      const cfg = getSimpleLoginConfig();
+      const officeSub = (cfg && cfg.officeSub) ? cfg.officeSub : "";
+      const dayName = getDayNameForISO(activeDt);
+
+      const colRows = (cur.collections || []).filter(c => (c.name && c.name.trim()) || (Number(c.amount) || 0) > 0);
+      const expRows = (cur.expenses || []).filter(e => (e.name && e.name.trim()) || (Number(e.amount) || 0) > 0);
+      const maxSubRows = Math.max(1, colRows.length, expRows.length);
+
+      const mainRows = [
+        { label: t("rowOpening"), inc: `₹ ${fmt(n.opening)}`, exp: "—", isInc: true, isExp: false },
+        { label: t("rowCollection"), inc: `₹ ${fmt(n.collection)}`, exp: "—", isInc: true, isExp: false },
+        { label: t("rowEduppu"), inc: `₹ ${fmt(n.eduppu)}`, exp: "—", isInc: true, isExp: false },
+        { label: (cur.extraCreditLabel || "").trim() || t("extraSummaryLbl"), inc: `₹ ${fmt(n.extra)}`, exp: "—", isInc: true, isExp: false },
+        { label: t("rowAdappu"), inc: "—", exp: `₹ ${fmt(n.adappu)}`, isInc: false, isExp: true },
+        { label: t("rowExpense"), inc: "—", exp: `₹ ${fmt(n.expense)}`, isInc: false, isExp: true },
+        { label: t("rowTotalInflow"), inc: `₹ ${fmt(n.totalInflow)}`, exp: `₹ ${fmt(n.totalOutflow)}`, isInc: true, isExp: true, highlight: true },
+        { label: t("rowMainOutflow"), inc: `₹ ${fmt(n.totalOutflow)}`, exp: "—", isInc: false, isExp: true, highlight: true },
+        { label: t("rowNet"), inc: `₹ ${fmt(n.net)}`, exp: "—", isInc: n.net >= 0, isExp: n.net < 0, highlight: true },
+        { label: (cur.personLabel || "ராஜேஷ்").trim(), inc: `₹ ${fmt(n.person)}`, exp: "—", isInc: false, isExp: true },
+        { label: t("rowClosing"), inc: `₹ ${fmt(n.closing)}`, exp: "—", isInc: n.closing >= 0, isExp: n.closing < 0, closing: true }
+      ];
+
+      const width = 760;
+      const rowH = 32;
+      const height = 250 + (officeSub ? 20 : 0) + (mainRows.length * rowH) + 70 + (maxSubRows * 28) + ((cur.remarks || "").trim() ? 52 : 16);
+
+      const canvas = document.createElement("canvas");
+      const scale = 2;
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      ctx.scale(scale, scale);
+      const fontFamily = '"Noto Sans Tamil", "Latha", "Vijaya", system-ui, -apple-system, sans-serif';
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, height);
+
+      const pad = 18;
+      const boxW = width - pad * 2;
+      const boxH = height - pad * 2;
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(pad, pad, boxW, boxH);
+
+      let y = pad + 24;
+      ctx.textAlign = "center";
+      ctx.font = `800 13.5px ${fontFamily}`;
+      ctx.fillStyle = "#b45309";
+      ctx.fillText(t("rcpLine1U"), width / 2, y);
+
+      y += 18;
+      ctx.font = `800 12px ${fontFamily}`;
+      ctx.fillText(t("rcpLine2Sivamayam"), width / 2, y);
+
+      y += 22;
+      ctx.font = `800 20px ${fontFamily}`;
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(t("brandName"), width / 2, y);
+
+      if (officeSub) {
+        y += 18;
+        ctx.font = `600 12px ${fontFamily}`;
+        ctx.fillStyle = "#475569";
+        ctx.fillText(officeSub, width / 2, y);
+      }
+
+      y += 14;
+      ctx.textAlign = "left";
+      ctx.font = `800 12.5px ${fontFamily}`;
+      ctx.fillStyle = "#1e3a8a";
+      ctx.fillText(`${t("dateLbl")}: ${fmtDateTA(activeDt)}${dayName ? ` (${dayName})` : ""}`, pad + 12, y);
+
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#475569";
+      ctx.fillText(`ARM-${String(activeDt).replace(/-/g, "")}`, width - pad - 12, y);
+
+      y += 10;
+      const tblX = pad + 12;
+      const tblW = boxW - 24;
+      const col1W = Math.round(tblW * 0.36);
+      const col2W = Math.round(tblW * 0.34);
+      const col3W = tblW - col1W - col2W;
+
+      ctx.fillStyle = "#f1f5f9";
+      ctx.fillRect(tblX, y, tblW, rowH);
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(tblX, y, tblW, rowH);
+
+      ctx.font = `800 12px ${fontFamily}`;
+      ctx.fillStyle = "#0f172a";
+      ctx.textAlign = "left";
+      ctx.fillText(t("thParticulars"), tblX + 10, y + 21);
+
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#047857";
+      ctx.fillText(t("thIncomeNet"), tblX + col1W + col2W - 10, y + 21);
+
+      ctx.fillStyle = "#b91c1c";
+      ctx.fillText(t("thOutflow"), tblX + tblW - 10, y + 21);
+
+      y += rowH;
+
+      mainRows.forEach(r => {
+        ctx.fillStyle = r.closing ? "#ecfdf5" : (r.highlight ? "#f8fafc" : "#ffffff");
+        ctx.fillRect(tblX, y, tblW, rowH);
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(tblX, y, tblW, rowH);
+
+        ctx.font = r.closing ? `800 14.5px ${fontFamily}` : `700 12.5px ${fontFamily}`;
+        ctx.fillStyle = r.closing ? "#047857" : "#0f172a";
+        ctx.textAlign = "left";
+        ctx.fillText(r.label, tblX + 10, y + 21);
+
+        ctx.textAlign = "right";
+        ctx.font = r.closing ? `800 15px ${fontFamily}` : `800 12.5px ${fontFamily}`;
+        if (r.inc === "—") {
+          ctx.fillStyle = "#94a3b8";
+          ctx.fillText("—", tblX + col1W + col2W - 10, y + 21);
+        } else {
+          ctx.fillStyle = r.closing ? "#047857" : (r.isInc ? "#047857" : "#b91c1c");
+          ctx.fillText(r.inc, tblX + col1W + col2W - 10, y + 21);
+        }
+
+        if (r.exp === "—") {
+          ctx.fillStyle = "#94a3b8";
+          ctx.fillText("—", tblX + tblW - 10, y + 21);
+        } else {
+          ctx.fillStyle = "#b91c1c";
+          ctx.fillText(r.exp, tblX + tblW - 10, y + 21);
+        }
+
+        y += rowH;
       });
+
+      // வசூல் & செலவு விவரப் பெட்டிகள்
+      y += 12;
+      const gapW = 12;
+      const halfW = (tblW - gapW) / 2;
+      const subH = 30 + maxSubRows * 28 + 32;
+
+      // இடது: வசூல்
+      ctx.fillStyle = "#f6fef9";
+      ctx.fillRect(tblX, y, halfW, subH);
+      ctx.strokeStyle = "#a7f3d0";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(tblX, y, halfW, subH);
+
+      ctx.textAlign = "left";
+      ctx.font = `800 12.5px ${fontFamily}`;
+      ctx.fillStyle = "#065f46";
+      ctx.fillText(`${t("colDetailsTitle")} (₹ ${fmt(n.collection)})`, tblX + 10, y + 20);
+
+      for (let i = 0; i < maxSubRows; i++) {
+        const ry = y + 30 + i * 28;
+        const item = colRows[i];
+        if (item) {
+          ctx.font = `700 12px ${fontFamily}`;
+          ctx.fillStyle = "#047857";
+          ctx.textAlign = "left";
+          ctx.fillText(item.name || t("itemPh"), tblX + 10, ry + 18);
+          ctx.textAlign = "right";
+          ctx.fillText(`₹ ${fmt(item.amount)}`, tblX + halfW - 10, ry + 18);
+        }
+      }
+
+      // வலது: செலவு
+      const rightX = tblX + halfW + gapW;
+      ctx.fillStyle = "#fff8f8";
+      ctx.fillRect(rightX, y, halfW, subH);
+      ctx.strokeStyle = "#fecaca";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(rightX, y, halfW, subH);
+
+      ctx.textAlign = "left";
+      ctx.font = `800 12.5px ${fontFamily}`;
+      ctx.fillStyle = "#991b1b";
+      ctx.fillText(`${t("expDetailsTitle")} (₹ ${fmt(n.expense)})`, rightX + 10, y + 20);
+
+      for (let i = 0; i < maxSubRows; i++) {
+        const ry = y + 30 + i * 28;
+        const item = expRows[i];
+        if (item) {
+          ctx.font = `700 12px ${fontFamily}`;
+          ctx.fillStyle = "#b91c1c";
+          ctx.textAlign = "left";
+          ctx.fillText(item.name || t("itemPh"), rightX + 10, ry + 18);
+          ctx.textAlign = "right";
+          ctx.fillText(`₹ ${fmt(item.amount)}`, rightX + halfW - 10, ry + 18);
+        }
+      }
+
+      y += subH;
+
+      const remTrim = (cur.remarks || "").trim();
+      if (remTrim) {
+        y += 12;
+        ctx.textAlign = "left";
+        ctx.font = `700 12px ${fontFamily}`;
+        ctx.fillStyle = "#475569";
+        ctx.fillText(`${t("remarksSummaryLbl")}: ${remTrim}`, tblX + 4, y + 14);
+      }
+
+      return canvas;
+    }
+
+    async function shareLedgerImage() {
+      try {
+        recalcLedger(false);
+        const canvas = renderLedgerToCanvas();
+        if (!canvas) {
+          showToast(t("ledgerImgShareErrToast"));
+          return;
+        }
+
+        const fileBaseName = `${getPrintDocumentName()}.png`;
+        const pngBlob = await new Promise(resolve => canvas.toBlob(resolve, "image/png", 0.96));
+        if (!pngBlob) {
+          showToast(t("ledgerImgShareErrToast"));
+          return;
+        }
+
+        const fileObj = new File([pngBlob], fileBaseName, { type: "image/png" });
+        if (navigator.canShare && navigator.share && navigator.canShare({ files: [fileObj] })) {
+          await navigator.share({
+            files: [fileObj],
+            title: getPrintDocumentName(),
+            text: `${t("brandName")} - ${getPrintDocumentName()}`
+          });
+          return;
+        }
+
+        const dlUrl = URL.createObjectURL(pngBlob);
+        const a = document.createElement("a");
+        a.href = dlUrl;
+        a.download = fileBaseName;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(dlUrl), 1200);
+        showToast(t("ledgerImgSavedToast"));
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+        showToast(t("ledgerImgShareErrToast"));
+      }
     }
 
     function shareWhatsApp() {
@@ -8055,6 +8472,9 @@ Are you sure you want to unlock and edit it?`
       }
 
       safeStorageRemove(localStorage, SESS_KEY);
+      if (isSupaConfigured()) {
+        pullLoginConfigFromSupabase().then(() => updateLoginScreenState());
+      }
       const isLoggedIn = safeStorageGet(sessionStorage, SESS_KEY) === "1";
 
       if (isLoggedIn) {
