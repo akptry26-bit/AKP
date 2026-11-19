@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
   <title>ஸ்ரீ லெட்சுமி பைனான்ஸ் | Sri Lakshmi Finance</title>
+  <link id="browserFaviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='2' y='2' width='60' height='60' rx='16' fill='%231E3A8A'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23FFFFFF' stroke='%23D97706' stroke-width='3'/%3E%3Ctext x='32' y='44' text-anchor='middle' fill='%231E3A8A' font-size='26' font-weight='800' font-family='sans-serif'%3E%E2%82%B9%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='2' y='2' width='60' height='60' rx='16' fill='%231E3A8A'/%3E%3Ccircle cx='32' cy='32' r='20' fill='%23FFFFFF' stroke='%23D97706' stroke-width='3'/%3E%3Ctext x='32' y='44' text-anchor='middle' fill='%231E3A8A' font-size='26' font-weight='800' font-family='sans-serif'%3E%E2%82%B9%3C/text%3E%3C/svg%3E" />
   <style>
     :root {
       --bg-page: #f8fafc;
@@ -2191,7 +2193,7 @@
 
     .rcp-actions-bar {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
       margin-top: 14px;
     }
@@ -3953,6 +3955,7 @@ CREATE POLICY "Valid ledger rows access"
 
       <div class="rcp-actions-bar receipt-no-print">
         <button type="button" class="btn btn-dark" onclick="printReceiptPDF()" data-i18n="btnPrintReceipt">🖨️ பிடிஎஃப் / அச்சு</button>
+        <button type="button" class="btn btn-primary" onclick="shareReceiptImage()" data-i18n="btnShareReceiptImg">🖼️ ரசீது படம் பகிர்</button>
         <button type="button" class="btn btn-wa" onclick="shareReceiptWhatsApp()" data-i18n="btnWa">💬 வாட்ஸ்அப்</button>
         <button type="button" class="btn btn-white" onclick="copyReceiptText()" data-i18n="btnCopy">📋 நகலெடு</button>
       </div>
@@ -4203,6 +4206,9 @@ CREATE POLICY "Valid ledger rows access"
         rcpReceiverSign: "பெறுநர் கையொப்பம்",
         rcpAuthSign: "அங்கீகரிக்கப்பட்ட கையொப்பம்",
         btnPrintReceipt: "🖨️ பிடிஎஃப் / அச்சு",
+        btnShareReceiptImg: "🖼️ ரசீது படம் பகிர்",
+        rcpImgSavedToast: "ரசீது படம் பதிவிறக்கப்பட்டது! வாட்ஸ்அப்பில் பகிரலாம்.",
+        rcpImgShareErrToast: "ரசீது படத்தை உருவாக்க முடியவில்லை!",
         rcpNoItems: "தேர்ந்தெடுக்கப்பட்ட பிரிவில் பதிவுகள் இல்லை",
         noRecords: "பொருந்தும் கணக்குப் பதிவுகள் இல்லை",
         noTxns: "பொருந்தும் பரிவர்த்தனைகள் இல்லை",
@@ -4416,6 +4422,9 @@ CREATE POLICY "Valid ledger rows access"
         rcpReceiverSign: "Receiver Signature",
         rcpAuthSign: "Authorized Signatory",
         btnPrintReceipt: "🖨️ Print / PDF",
+        btnShareReceiptImg: "🖼️ Share Receipt Image",
+        rcpImgSavedToast: "Receipt image downloaded! Ready to share.",
+        rcpImgShareErrToast: "Could not generate receipt image!",
         rcpNoItems: "No entries found in the selected filter",
         noRecords: "No matching ledger records found",
         noTxns: "No matching transactions found",
@@ -5765,6 +5774,16 @@ CREATE POLICY "Valid ledger rows access"
     }
 
     /* ================= நிறுவனத் தர பிடிஎஃப் அச்சு (தினசரி & வரலாறு) ================= */
+    const DEFAULT_APP_TITLE = document.title;
+
+    function getPrintDocumentName() {
+      return `print (ARM - ${fmtDateTA(getToday())})`;
+    }
+
+    function getReceiptDocumentName() {
+      return `receipt (SLF-${fmtDateTA(getToday())})`;
+    }
+
     function exportOnePagePDF() {
       document.body.classList.remove("print-history-mode");
       applyOfficeTaglineToPrint();
@@ -5775,6 +5794,7 @@ CREATE POLICY "Valid ledger rows access"
       if (!remVal) remBox.classList.add("print-skip-empty");
       else remBox.classList.remove("print-skip-empty");
 
+      document.title = getPrintDocumentName();
       setTimeout(() => {
         window.print();
       }, 120);
@@ -5806,15 +5826,20 @@ CREATE POLICY "Valid ledger rows access"
         `${currentLang === "en" ? "Printed on" : "அச்சிடப்பட்ட தேதி"}: ${fmtDateTA(getToday())}`;
 
       document.body.classList.add("print-history-mode");
+      document.title = getPrintDocumentName();
       setTimeout(() => {
         window.print();
-        setTimeout(() => document.body.classList.remove("print-history-mode"), 400);
+        setTimeout(() => {
+          document.body.classList.remove("print-history-mode");
+          document.title = DEFAULT_APP_TITLE;
+        }, 400);
       }, 120);
     }
 
     window.addEventListener("afterprint", () => {
       document.body.classList.remove("print-history-mode");
       document.body.classList.remove("print-receipt-mode");
+      document.title = DEFAULT_APP_TITLE;
     });
 
     function buildTextSummary() {
@@ -7016,10 +7041,337 @@ CREATE POLICY "Valid ledger rows access"
       toggleReceiptSignature();
       document.body.classList.remove("print-history-mode");
       document.body.classList.add("print-receipt-mode");
+      document.title = getReceiptDocumentName();
       setTimeout(() => {
         window.print();
-        setTimeout(() => document.body.classList.remove("print-receipt-mode"), 400);
+        setTimeout(() => {
+          document.body.classList.remove("print-receipt-mode");
+          document.title = DEFAULT_APP_TITLE;
+        }, 400);
       }, 120);
+    }
+
+    function renderReceiptToCanvas() {
+      const scope = document.getElementById("receiptScopeFilter").value || "all";
+      const toDateVal = document.getElementById("receiptToDate").value || getToday();
+      const cName = (document.getElementById("receiptCustName").value || "").trim();
+      const cPhone = (document.getElementById("receiptCustPhone").value || "").trim();
+      const noteTxt = (document.getElementById("receiptExtraNote").value || "").trim();
+      const signChecked = Boolean(document.getElementById("receiptSignChk") && document.getElementById("receiptSignChk").checked);
+      const intState = getManualInterestState();
+      const cfg = getSimpleLoginConfig();
+      const officeSub = (cfg && cfg.officeSub) ? cfg.officeSub : "";
+      const items = buildReceiptItemsList(activeReceiptDate, scope);
+
+      const activeRows = [];
+      let totalSelectedAmt = 0;
+      items.forEach((it, idx) => {
+        if (receiptExcludedIndices.has(idx)) return;
+        activeRows.push({
+          sno: activeRows.length + 1,
+          date: fmtDateTA(it.date),
+          name: it.name,
+          amt: it.amt,
+          duration: formatDurationCellForReceipt(calcDaysElapsed(it.date, toDateVal)),
+          isIncome: it.isIncome
+        });
+        totalSelectedAmt += it.amt;
+      });
+
+      const width = 620;
+      const rowHeight = 36;
+      const baseHeight = 340 + (officeSub ? 20 : 0) + ((cName || cPhone) ? 34 : 0) + (noteTxt ? 36 : 0) + (signChecked ? 76 : 16) + (intState.enabled ? 72 : 0);
+      const height = Math.max(460, baseHeight + Math.max(1, activeRows.length) * rowHeight);
+
+      const canvas = document.createElement("canvas");
+      const scale = 2;
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+
+      ctx.scale(scale, scale);
+      const fontFamily = '"Noto Sans Tamil", "Latha", "Vijaya", system-ui, -apple-system, sans-serif';
+
+      // வெளிப்புற வெள்ளை பின்னணி & ரசீது அட்டை
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, height);
+
+      const pad = 20;
+      const cardW = width - pad * 2;
+      const cardH = height - pad * 2;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 2;
+      ctx.fillRect(pad, pad, cardW, cardH);
+      ctx.strokeRect(pad, pad, cardW, cardH);
+
+      let y = pad + 26;
+      ctx.textAlign = "center";
+      ctx.font = `800 14px ${fontFamily}`;
+      ctx.fillStyle = "#b45309";
+      ctx.fillText(t("rcpLine1U"), width / 2, y);
+
+      y += 20;
+      ctx.font = `800 12.5px ${fontFamily}`;
+      ctx.fillText(t("rcpLine2Sivamayam"), width / 2, y);
+
+      // இலச்சினை (Custom uploaded image if available, else gold/navy emblem)
+      const cb = getCustomBrandConfig();
+      const logoSize = 44;
+      const logoX = width / 2 - logoSize / 2;
+      y += 10;
+
+      if (cb.logoDataUrl) {
+        const logoImg = new Image();
+        logoImg.src = cb.logoDataUrl;
+        if (logoImg.complete && logoImg.naturalWidth > 0) {
+          ctx.drawImage(logoImg, logoX, y, logoSize, logoSize);
+        }
+      } else {
+        ctx.fillStyle = "#eff6ff";
+        ctx.strokeStyle = "#1e3a8a";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(logoX, y, logoSize, logoSize, 10);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#1e3a8a";
+        ctx.font = `800 20px sans-serif`;
+        ctx.fillText("₹", width / 2, y + 30);
+      }
+
+      y += logoSize + 22;
+      ctx.font = `800 20px ${fontFamily}`;
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(t("brandName"), width / 2, y);
+
+      if (officeSub) {
+        y += 18;
+        ctx.font = `600 12px ${fontFamily}`;
+        ctx.fillStyle = "#475569";
+        ctx.fillText(officeSub, width / 2, y);
+      }
+
+      y += 12;
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(pad + 14, y);
+      ctx.lineTo(width - pad - 14, y);
+      ctx.stroke();
+
+      // மெட்டா பட்டை (Receipt Badge, No, Date)
+      y += 12;
+      const stripX = pad + 14;
+      const stripW = cardW - 28;
+      ctx.fillStyle = "#eff6ff";
+      ctx.strokeStyle = "#dbeafe";
+      ctx.lineWidth = 1;
+      ctx.fillRect(stripX, y, stripW, 32);
+      ctx.strokeRect(stripX, y, stripW, 32);
+
+      ctx.textAlign = "left";
+      ctx.font = `800 11.5px ${fontFamily}`;
+      ctx.fillStyle = "#1e3a8a";
+      ctx.fillText(t("rcpOfficialBadge"), stripX + 10, y + 20);
+
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(`No: RCP-${String(activeReceiptDate).replace(/-/g, "")}`, width / 2, y + 20);
+
+      ctx.textAlign = "right";
+      ctx.fillText(`${t("dateLbl")}: ${fmtDateTA(toDateVal)}`, stripX + stripW - 10, y + 20);
+
+      y += 40;
+      if (cName || cPhone) {
+        const custParts = [];
+        if (cName) custParts.push(`${t("rcpCustLbl")}: ${cName}`);
+        if (cPhone) custParts.push(`${t("rcpPhoneLbl")}: ${cPhone}`);
+        ctx.textAlign = "left";
+        ctx.font = `700 12px ${fontFamily}`;
+        ctx.fillStyle = "#0f172a";
+        ctx.fillText(custParts.join("   |   "), stripX + 6, y + 16);
+        y += 28;
+      }
+
+      // அட்டவணை தலைப்பு
+      const colSnoX = stripX + 8;
+      const colDateX = stripX + 56;
+      const colNameX = stripX + 146;
+      const colAmtRightX = stripX + stripW - 122;
+      const colDurCenterX = stripX + stripW - 58;
+
+      ctx.fillStyle = "#f1f5f9";
+      ctx.fillRect(stripX, y, stripW, 32);
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.strokeRect(stripX, y, stripW, 32);
+
+      ctx.font = `800 12px ${fontFamily}`;
+      ctx.fillStyle = "#475569";
+      ctx.textAlign = "left";
+      ctx.fillText(t("rcpColSNo"), colSnoX, y + 20);
+      ctx.fillText(t("thDate"), colDateX, y + 20);
+      ctx.fillText(t("rcpColName"), colNameX, y + 20);
+
+      ctx.textAlign = "right";
+      ctx.fillText(t("thAmount"), colAmtRightX, y + 20);
+
+      ctx.textAlign = "center";
+      ctx.fillText(isWeeklyReceiptEnabled() ? t("rcpColWeek") : t("rcpColDays"), colDurCenterX, y + 20);
+
+      y += 32;
+
+      if (activeRows.length === 0) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(stripX, y, stripW, rowHeight);
+        ctx.strokeRect(stripX, y, stripW, rowHeight);
+        ctx.textAlign = "center";
+        ctx.font = `700 12.5px ${fontFamily}`;
+        ctx.fillStyle = "#64748b";
+        ctx.fillText(t("rcpNoItems"), width / 2, y + 23);
+        y += rowHeight;
+      } else {
+        activeRows.forEach(r => {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(stripX, y, stripW, rowHeight);
+          ctx.strokeStyle = "#e2e8f0";
+          ctx.strokeRect(stripX, y, stripW, rowHeight);
+
+          const amtColor = r.isIncome ? "#047857" : "#b91c1c";
+          ctx.font = `700 12.5px ${fontFamily}`;
+          ctx.fillStyle = "#0f172a";
+          ctx.textAlign = "left";
+          ctx.fillText(String(r.sno), colSnoX + 6, y + 23);
+          ctx.fillText(r.date, colDateX, y + 23);
+
+          ctx.fillStyle = amtColor;
+          ctx.font = `800 12.5px ${fontFamily}`;
+          ctx.fillText(r.name, colNameX, y + 23);
+
+          ctx.textAlign = "right";
+          ctx.fillText(`₹ ${fmt(r.amt)}`, colAmtRightX, y + 23);
+
+          ctx.textAlign = "center";
+          ctx.font = `800 11.5px ${fontFamily}`;
+          ctx.fillStyle = "#b45309";
+          ctx.fillText(r.duration, colDurCenterX, y + 23);
+
+          y += rowHeight;
+        });
+      }
+
+      // மொத்தத் தொகை வரி
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(stripX, y, stripW, 34);
+      ctx.strokeStyle = "#94a3b8";
+      ctx.strokeRect(stripX, y, stripW, 34);
+
+      ctx.textAlign = "right";
+      ctx.font = `800 13px ${fontFamily}`;
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(`${t("histGrandAmountLbl")} (${activeRows.length}):`, colAmtRightX - 105, y + 22);
+      ctx.fillStyle = scope === "income" ? "#047857" : (scope === "expense" ? "#b91c1c" : "#0f172a");
+      ctx.fillText(`₹ ${fmt(totalSelectedAmt)}`, colAmtRightX, y + 22);
+      y += 34;
+
+      if (intState.enabled) {
+        const netWithInterest = totalSelectedAmt + intState.amount;
+        ctx.fillStyle = "#fffbeb";
+        ctx.fillRect(stripX, y, stripW, 34);
+        ctx.strokeRect(stripX, y, stripW, 34);
+        ctx.textAlign = "right";
+        ctx.font = `800 12.5px ${fontFamily}`;
+        ctx.fillStyle = "#b45309";
+        ctx.fillText(`${intState.label}:`, colAmtRightX - 105, y + 22);
+        ctx.fillText(`₹ ${fmt(intState.amount)}`, colAmtRightX, y + 22);
+        y += 34;
+
+        ctx.fillStyle = "#eff6ff";
+        ctx.fillRect(stripX, y, stripW, 36);
+        ctx.strokeRect(stripX, y, stripW, 36);
+        ctx.font = `800 13.5px ${fontFamily}`;
+        ctx.fillStyle = "#1e3a8a";
+        ctx.fillText(`${t("rcpNetPayableLbl")}:`, colAmtRightX - 105, y + 23);
+        ctx.fillText(`₹ ${fmt(netWithInterest)}`, colAmtRightX, y + 23);
+        y += 36;
+      }
+
+      if (noteTxt) {
+        y += 10;
+        ctx.textAlign = "left";
+        ctx.font = `700 12px ${fontFamily}`;
+        ctx.fillStyle = "#475569";
+        ctx.fillText(`${t("remarksSummaryLbl")}: ${noteTxt}`, stripX + 4, y + 14);
+        y += 24;
+      }
+
+      if (signChecked) {
+        y += 36;
+        const leftSignX = stripX + 16;
+        const rightSignX = stripX + stripW - 166;
+        const signLineW = 150;
+
+        ctx.strokeStyle = "#94a3b8";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(leftSignX, y);
+        ctx.lineTo(leftSignX + signLineW, y);
+        ctx.moveTo(rightSignX, y);
+        ctx.lineTo(rightSignX + signLineW, y);
+        ctx.stroke();
+
+        ctx.textAlign = "center";
+        ctx.font = `700 11.5px ${fontFamily}`;
+        ctx.fillStyle = "#475569";
+        ctx.fillText(t("rcpReceiverSign"), leftSignX + signLineW / 2, y + 16);
+        ctx.fillText(t("rcpAuthSign"), rightSignX + signLineW / 2, y + 16);
+      }
+
+      return canvas;
+    }
+
+    async function shareReceiptImage() {
+      try {
+        toggleReceiptSignature();
+        renderReceiptBody();
+
+        const canvas = renderReceiptToCanvas();
+        if (!canvas) {
+          showToast(t("rcpImgShareErrToast"));
+          return;
+        }
+
+        const fileBaseName = `${getReceiptDocumentName()}.png`;
+        const pngBlob = await new Promise(resolve => canvas.toBlob(resolve, "image/png", 0.96));
+        if (!pngBlob) {
+          showToast(t("rcpImgShareErrToast"));
+          return;
+        }
+
+        const fileObj = new File([pngBlob], fileBaseName, { type: "image/png" });
+        if (navigator.canShare && navigator.share && navigator.canShare({ files: [fileObj] })) {
+          await navigator.share({
+            files: [fileObj],
+            title: getReceiptDocumentName(),
+            text: `${t("brandName")} - ${getReceiptDocumentName()}`
+          });
+          return;
+        }
+
+        const dlUrl = URL.createObjectURL(pngBlob);
+        const a = document.createElement("a");
+        a.href = dlUrl;
+        a.download = fileBaseName;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(dlUrl), 1200);
+        showToast(t("rcpImgSavedToast"));
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+        showToast(t("rcpImgShareErrToast"));
+      }
     }
 
     function shareReceiptWhatsApp() {
