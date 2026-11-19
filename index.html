@@ -568,6 +568,17 @@
       display: block;
     }
 
+    .receipt-page-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
     @keyframes slideUp {
       from {
         opacity: 0;
@@ -2949,33 +2960,23 @@
       }
 
       /* அச்சு முறை 3: தனிப்பட்ட ரசீது அச்சு (Receipt Print Mode) */
-      body.print-receipt-mode .app-shell,
+      body.print-receipt-mode .corp-header,
+      body.print-receipt-mode .mobile-bottom-bar,
+      body.print-receipt-mode #ledgerView,
+      body.print-receipt-mode #denomView,
+      body.print-receipt-mode #historyView,
+      body.print-receipt-mode #settingsView,
       body.print-receipt-mode #detailModal,
       body.print-receipt-mode #calcModal,
       body.print-receipt-mode #customCatModal,
+      body.print-receipt-mode #customConfirmModal,
       body.print-receipt-mode .receipt-no-print {
         display: none !important;
       }
 
-      body.print-receipt-mode #receiptModal.open {
+      body.print-receipt-mode #receiptView {
         display: block !important;
-        position: static !important;
-        inset: auto !important;
-        background: #ffffff !important;
-        backdrop-filter: none !important;
-        padding: 0 !important;
         width: 100% !important;
-      }
-
-      body.print-receipt-mode #receiptModal .modal-window {
-        max-width: 100% !important;
-        width: 100% !important;
-        max-height: none !important;
-        overflow: visible !important;
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0 !important;
-        border-radius: 0 !important;
       }
 
       body.print-receipt-mode .receipt-paper {
@@ -3783,6 +3784,139 @@ CREATE POLICY "Valid ledger rows access"
         </div>
       </section>
 
+      <!-- ============ பக்கம் 5: ரசீது பக்கம் (Dedicated Receipt Page) ============ -->
+      <section id="receiptView" class="page-view">
+        <div class="white-panel">
+          <div class="receipt-page-topbar receipt-no-print">
+            <button type="button" class="btn btn-white" onclick="backFromReceiptPage()">
+              <span>←</span>
+              <span data-i18n="btnBackToHistory">வரலாறு பக்கத்திற்குத் திரும்புக</span>
+            </button>
+            <h3 style="font-size: 17px; color: var(--corp-navy);" data-i18n="receiptModalTitle">🧾 ரசீது (Receipt)</h3>
+          </div>
+
+          <!-- ரசீது கூடுதல் விருப்பங்கள் (Extra Options) -->
+          <div class="receipt-controls-box receipt-no-print">
+            <div class="receipt-ctrl-grid">
+              <select id="receiptScopeFilter" class="f-input" onchange="renderReceiptBody()">
+                <option value="all" data-i18n="rcpScopeAll">அனைத்துப் பதிவுகளும் (வரவு + செலவு)</option>
+                <option value="income" data-i18n="rcpScopeInc">வரவு / வசூல் மட்டும்</option>
+                <option value="expense" data-i18n="rcpScopeExp">செலவு / அடப்பு மட்டும்</option>
+              </select>
+              <div class="hist-date-pill" style="min-height: 36px;">
+                <label for="receiptToDate" data-i18n="rcpTodayLbl">இன்றைய தேதி:</label>
+                <input type="date" id="receiptToDate" onchange="renderReceiptBody()" />
+              </div>
+            </div>
+            <div class="receipt-ctrl-grid">
+              <input type="text" id="receiptCustName" class="f-input" data-i18n-ph="rcpCustNamePh" placeholder="வாடிக்கையாளர் பெயர் (விருப்பத்திற்கு)" oninput="updateReceiptMetaDisplay()" />
+              <input type="tel" id="receiptCustPhone" class="f-input" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" data-i18n-ph="rcpCustPhonePh" placeholder="கைபேசி எண் (10 இலக்கம்)" oninput="onReceiptPhoneInput(this)" />
+            </div>
+
+            <!-- விருப்பத் தேர்வுகள் (Tick Boxes): கையொப்பம், வட்டி & வாரமாக மாற்று -->
+            <div class="rcp-toggle-row">
+              <label class="rcp-chk-label">
+                <input type="checkbox" id="receiptSignChk" checked onchange="toggleReceiptSignature()" />
+                <span data-i18n="rcpChkSignature">கையொப்பம் (Signature)</span>
+              </label>
+              <label class="rcp-chk-label">
+                <input type="checkbox" id="receiptInterestChk" onchange="toggleReceiptInterestManual()" />
+                <span data-i18n="rcpChkInterest">வட்டி கைமுறை உள்ளீடு (Interest)</span>
+              </label>
+              <label class="rcp-chk-label">
+                <input type="checkbox" id="receiptWeeklyChk" onchange="toggleReceiptWeeklyMode()" />
+                <span data-i18n="rcpChkWeekly">நாட்களை வாரமாக மாற்று (Days → Week)</span>
+              </label>
+            </div>
+
+            <!-- வாரக் கணக்குத் தேர்வுப் பெட்டி (Days -> Weekly Tick செய்தால் மட்டும் தோன்றும்) -->
+            <div class="rcp-weekly-manual-box" id="receiptWeeklyManualBox">
+              <select id="receiptWeekFractionMode" class="f-input" onchange="toggleReceiptWeeklyMode()">
+                <option value="decimal" data-i18n="rcpWeekDecimalOpt">தசம வாரம் (உதாரணம்: 16 நாள் = 2.29 வாரம்)</option>
+                <option value="manual" data-i18n="rcpWeekManualOpt">கைமுறை வார எண்ணிக்கை (Manual Entry)</option>
+              </select>
+              <input type="number" step="any" inputmode="decimal" id="receiptManualWeekVal" class="f-input" style="display: none; text-align: right; font-weight: 800;" data-i18n-ph="rcpWeekManualPh" placeholder="வார எண்ணிக்கை உள்ளிடவும் (உதா: 2 or 2.5)" oninput="renderReceiptBody()" />
+            </div>
+
+            <!-- வட்டி கைமுறை உள்ளீடு பெட்டி (Tick செய்தால் மட்டும் தோன்றும்) -->
+            <div class="rcp-interest-manual-box" id="receiptInterestManualBox">
+              <input type="text" id="receiptInterestLabel" class="f-input" data-i18n-ph="rcpInterestLblPh" placeholder="வட்டி விவரம் (உதாரணம்: மாத வட்டி 2%)" oninput="renderReceiptBody()" />
+              <div class="amt-field-box" style="max-width: 100%;">
+                <span class="rs-symbol exp">₹</span>
+                <input type="number" inputmode="numeric" id="receiptInterestAmt" class="f-input" style="width: 100%; padding-left: 24px; text-align: right; font-weight: 800;" data-i18n-ph="rcpInterestAmtPh" placeholder="வட்டித் தொகை (0)" oninput="renderReceiptBody()" />
+              </div>
+            </div>
+
+            <input type="text" id="receiptExtraNote" class="f-input" style="width: 100%;" data-i18n-ph="rcpNotePh" placeholder="கூடுதல் குறிப்பு (தேவைப்படின்)..." oninput="updateReceiptMetaDisplay()" />
+          </div>
+
+          <!-- அச்சிடக்கூடிய நிறுவன ரசீது படிவம் -->
+          <div class="receipt-paper" id="receiptPaperArea">
+            <div class="rcp-header">
+              <!-- Line 1: U -->
+              <div class="rcp-line-u" data-i18n="rcpLine1U">உ</div>
+              <!-- Line 2: Sivamayam -->
+              <div class="rcp-line-sivamayam" data-i18n="rcpLine2Sivamayam">சிவமயம்</div>
+              <!-- Line 3: Logo -->
+              <div class="rcp-line-logo" data-brand-logo-slot="receipt">
+                <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="2" y="2" width="60" height="60" rx="14" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="3"/>
+                  <circle cx="32" cy="32" r="20" fill="#FFFFFF" stroke="#D97706" stroke-width="2.5"/>
+                  <path d="M32 14C28.5 19.5 28.5 24 32 27.5C35.5 24 35.5 19.5 32 14Z" fill="#D97706"/>
+                  <path d="M21 21C21.5 26 24.5 28.5 29 29C27 24.5 24.5 22 21 21Z" fill="#F59E0B"/>
+                  <path d="M43 21C42.5 26 39.5 28.5 35 29C37 24.5 39.5 22 43 21Z" fill="#F59E0B"/>
+                  <text x="32" y="45" text-anchor="middle" fill="#1E3A8A" font-size="18" font-weight="800" font-family="sans-serif">₹</text>
+                </svg>
+              </div>
+              <!-- Line 4: Finance Name -->
+              <div class="rcp-brand-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
+              <div class="rcp-office-sub" id="receiptOfficeSub"></div>
+            </div>
+
+            <div class="rcp-meta-strip">
+              <span class="rcp-badge" data-i18n="rcpOfficialBadge">பற்று / வரவு ரசீது</span>
+              <span id="receiptNoVal">No: RCP-00000000</span>
+              <span id="receiptTodayVal">இன்று: —</span>
+            </div>
+
+            <div class="rcp-cust-strip" id="receiptCustDisplayRow">
+              <span id="receiptCustDisplayVal"></span>
+            </div>
+
+            <div class="tbl-responsive">
+              <table class="corp-table">
+                <thead>
+                  <tr>
+                    <th class="receipt-no-print" style="width: 32px; text-align: center;">✓</th>
+                    <th style="width: 48px; text-align: center;" data-i18n="rcpColSNo">வ.எண்</th>
+                    <th data-i18n="thDate">தேதி</th>
+                    <th data-i18n="rcpColName">பெயர்</th>
+                    <th class="align-r" data-i18n="thAmount">தொகை</th>
+                    <th id="receiptDurationTh" style="text-align: center;" data-i18n="rcpColDays">நாட்கள்</th>
+                  </tr>
+                </thead>
+                <tbody id="receiptTableBody"></tbody>
+                <tfoot id="receiptTableFoot"></tfoot>
+              </table>
+            </div>
+
+            <div class="rcp-note-box" id="receiptNoteDisplay"></div>
+
+            <div class="rcp-sign-row" id="receiptSignRow">
+              <div class="rcp-sign-box" data-i18n="rcpReceiverSign">பெறுநர் கையொப்பம்</div>
+              <div class="rcp-sign-box" data-i18n="rcpAuthSign">அங்கீகரிக்கப்பட்ட கையொப்பம்</div>
+            </div>
+          </div>
+
+          <div class="rcp-actions-bar receipt-no-print">
+            <button type="button" class="btn btn-dark" onclick="printReceiptPDF()" data-i18n="btnPrintReceipt">🖨️ பிடிஎஃப் / அச்சு</button>
+            <button type="button" class="btn btn-primary" onclick="shareReceiptImage()" data-i18n="btnShareReceiptImg">🖼️ ரசீது படம் பகிர்</button>
+            <button type="button" class="btn btn-wa" onclick="shareReceiptWhatsApp()" data-i18n="btnWa">💬 வாட்ஸ்அப்</button>
+            <button type="button" class="btn btn-white" onclick="copyReceiptText()" data-i18n="btnCopy">📋 நகலெடு</button>
+          </div>
+        </div>
+      </section>
+
     </main>
 
     <!-- கைபேசி கீழ் மெனு பட்டை (4 தாவல்கள்) -->
@@ -3828,136 +3962,6 @@ CREATE POLICY "Valid ledger rows access"
       <div class="confirm-modal-actions">
         <button type="button" class="btn btn-white" id="btnConfirmCancel" onclick="resolveCustomConfirm(false)" data-i18n="btnConfirmCancel">ரத்து செய்</button>
         <button type="button" class="btn btn-primary" id="btnConfirmOk" onclick="resolveCustomConfirm(true)" data-i18n="btnConfirmOk">சரி, தொடரவும்</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ரசீது சாளரம் (Receipt Modal) -->
-  <div class="modal-mask" id="receiptModal" onclick="closeModal('receiptModal')">
-    <div class="modal-window" style="max-width: 620px;" onclick="event.stopPropagation()">
-      <div class="modal-header receipt-no-print">
-        <h3 style="font-size: 17px; color: var(--corp-navy);" data-i18n="receiptModalTitle">🧾 ரசீது (Receipt)</h3>
-        <button type="button" class="modal-close-btn" onclick="closeModal('receiptModal')">&times;</button>
-      </div>
-
-      <!-- ரசீது கூடுதல் விருப்பங்கள் (Extra Options) -->
-      <div class="receipt-controls-box receipt-no-print">
-        <div class="receipt-ctrl-grid">
-          <select id="receiptScopeFilter" class="f-input" onchange="renderReceiptBody()">
-            <option value="all" data-i18n="rcpScopeAll">அனைத்துப் பதிவுகளும் (வரவு + செலவு)</option>
-            <option value="income" data-i18n="rcpScopeInc">வரவு / வசூல் மட்டும்</option>
-            <option value="expense" data-i18n="rcpScopeExp">செலவு / அடப்பு மட்டும்</option>
-          </select>
-          <div class="hist-date-pill" style="min-height: 36px;">
-            <label for="receiptToDate" data-i18n="rcpTodayLbl">இன்றைய தேதி:</label>
-            <input type="date" id="receiptToDate" onchange="renderReceiptBody()" />
-          </div>
-        </div>
-        <div class="receipt-ctrl-grid">
-          <input type="text" id="receiptCustName" class="f-input" data-i18n-ph="rcpCustNamePh" placeholder="வாடிக்கையாளர் பெயர் (விருப்பத்திற்கு)" oninput="updateReceiptMetaDisplay()" />
-          <input type="tel" id="receiptCustPhone" class="f-input" data-i18n-ph="rcpCustPhonePh" placeholder="கைபேசி எண் (வாட்ஸ்அப் அனுப்ப)" oninput="updateReceiptMetaDisplay()" />
-        </div>
-
-        <!-- விருப்பத் தேர்வுகள் (Tick Boxes): கையொப்பம், வட்டி & வாரமாக மாற்று -->
-        <div class="rcp-toggle-row">
-          <label class="rcp-chk-label">
-            <input type="checkbox" id="receiptSignChk" checked onchange="toggleReceiptSignature()" />
-            <span data-i18n="rcpChkSignature">கையொப்பம் (Signature)</span>
-          </label>
-          <label class="rcp-chk-label">
-            <input type="checkbox" id="receiptInterestChk" onchange="toggleReceiptInterestManual()" />
-            <span data-i18n="rcpChkInterest">வட்டி கைமுறை உள்ளீடு (Interest)</span>
-          </label>
-          <label class="rcp-chk-label">
-            <input type="checkbox" id="receiptWeeklyChk" onchange="toggleReceiptWeeklyMode()" />
-            <span data-i18n="rcpChkWeekly">நாட்களை வாரமாக மாற்று (Days → Week)</span>
-          </label>
-        </div>
-
-        <!-- வாரக் கணக்குத் தேர்வுப் பெட்டி (Days -> Weekly Tick செய்தால் மட்டும் தோன்றும்) -->
-        <div class="rcp-weekly-manual-box" id="receiptWeeklyManualBox">
-          <select id="receiptWeekFractionMode" class="f-input" onchange="toggleReceiptWeeklyMode()">
-            <option value="decimal" data-i18n="rcpWeekDecimalOpt">தசம வாரம் (உதாரணம்: 16 நாள் = 2.29 வாரம்)</option>
-            <option value="manual" data-i18n="rcpWeekManualOpt">கைமுறை வார எண்ணிக்கை (Manual Entry)</option>
-          </select>
-          <input type="number" step="any" inputmode="decimal" id="receiptManualWeekVal" class="f-input" style="display: none; text-align: right; font-weight: 800;" data-i18n-ph="rcpWeekManualPh" placeholder="வார எண்ணிக்கை உள்ளிடவும் (உதா: 2 or 2.5)" oninput="renderReceiptBody()" />
-        </div>
-
-        <!-- வட்டி கைமுறை உள்ளீடு பெட்டி (Tick செய்தால் மட்டும் தோன்றும்) -->
-        <div class="rcp-interest-manual-box" id="receiptInterestManualBox">
-          <input type="text" id="receiptInterestLabel" class="f-input" data-i18n-ph="rcpInterestLblPh" placeholder="வட்டி விவரம் (உதாரணம்: மாத வட்டி 2%)" oninput="renderReceiptBody()" />
-          <div class="amt-field-box" style="max-width: 100%;">
-            <span class="rs-symbol exp">₹</span>
-            <input type="number" inputmode="numeric" id="receiptInterestAmt" class="f-input" style="width: 100%; padding-left: 24px; text-align: right; font-weight: 800;" data-i18n-ph="rcpInterestAmtPh" placeholder="வட்டித் தொகை (0)" oninput="renderReceiptBody()" />
-          </div>
-        </div>
-
-        <input type="text" id="receiptExtraNote" class="f-input" style="width: 100%;" data-i18n-ph="rcpNotePh" placeholder="கூடுதல் குறிப்பு (தேவைப்படின்)..." oninput="updateReceiptMetaDisplay()" />
-      </div>
-
-      <!-- அச்சிடக்கூடிய நிறுவன ரசீது படிவம் -->
-      <div class="receipt-paper" id="receiptPaperArea">
-        <div class="rcp-header">
-          <!-- Line 1: U -->
-          <div class="rcp-line-u" data-i18n="rcpLine1U">உ</div>
-          <!-- Line 2: Sivamayam -->
-          <div class="rcp-line-sivamayam" data-i18n="rcpLine2Sivamayam">சிவமயம்</div>
-          <!-- Line 3: Logo -->
-          <div class="rcp-line-logo" data-brand-logo-slot="receipt">
-            <svg width="46" height="46" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="2" y="2" width="60" height="60" rx="14" fill="#EFF6FF" stroke="#1E3A8A" stroke-width="3"/>
-              <circle cx="32" cy="32" r="20" fill="#FFFFFF" stroke="#D97706" stroke-width="2.5"/>
-              <path d="M32 14C28.5 19.5 28.5 24 32 27.5C35.5 24 35.5 19.5 32 14Z" fill="#D97706"/>
-              <path d="M21 21C21.5 26 24.5 28.5 29 29C27 24.5 24.5 22 21 21Z" fill="#F59E0B"/>
-              <path d="M43 21C42.5 26 39.5 28.5 35 29C37 24.5 39.5 22 43 21Z" fill="#F59E0B"/>
-              <text x="32" y="45" text-anchor="middle" fill="#1E3A8A" font-size="18" font-weight="800" font-family="sans-serif">₹</text>
-            </svg>
-          </div>
-          <!-- Line 4: Finance Name -->
-          <div class="rcp-brand-name" data-i18n="brandName">ஸ்ரீ லெட்சுமி பைனான்ஸ்</div>
-          <div class="rcp-office-sub" id="receiptOfficeSub"></div>
-        </div>
-
-        <div class="rcp-meta-strip">
-          <span class="rcp-badge" data-i18n="rcpOfficialBadge">பற்று / வரவு ரசீது</span>
-          <span id="receiptNoVal">No: RCP-00000000</span>
-          <span id="receiptTodayVal">இன்று: —</span>
-        </div>
-
-        <div class="rcp-cust-strip" id="receiptCustDisplayRow">
-          <span id="receiptCustDisplayVal"></span>
-        </div>
-
-        <div class="tbl-responsive">
-          <table class="corp-table">
-            <thead>
-              <tr>
-                <th class="receipt-no-print" style="width: 32px; text-align: center;">✓</th>
-                <th style="width: 48px; text-align: center;" data-i18n="rcpColSNo">வ.எண்</th>
-                <th data-i18n="thDate">தேதி</th>
-                <th data-i18n="rcpColName">பெயர்</th>
-                <th class="align-r" data-i18n="thAmount">தொகை</th>
-                <th id="receiptDurationTh" style="text-align: center;" data-i18n="rcpColDays">நாட்கள்</th>
-              </tr>
-            </thead>
-            <tbody id="receiptTableBody"></tbody>
-            <tfoot id="receiptTableFoot"></tfoot>
-          </table>
-        </div>
-
-        <div class="rcp-note-box" id="receiptNoteDisplay"></div>
-
-        <div class="rcp-sign-row" id="receiptSignRow">
-          <div class="rcp-sign-box" data-i18n="rcpReceiverSign">பெறுநர் கையொப்பம்</div>
-          <div class="rcp-sign-box" data-i18n="rcpAuthSign">அங்கீகரிக்கப்பட்ட கையொப்பம்</div>
-        </div>
-      </div>
-
-      <div class="rcp-actions-bar receipt-no-print">
-        <button type="button" class="btn btn-dark" onclick="printReceiptPDF()" data-i18n="btnPrintReceipt">🖨️ பிடிஎஃப் / அச்சு</button>
-        <button type="button" class="btn btn-primary" onclick="shareReceiptImage()" data-i18n="btnShareReceiptImg">🖼️ ரசீது படம் பகிர்</button>
-        <button type="button" class="btn btn-wa" onclick="shareReceiptWhatsApp()" data-i18n="btnWa">💬 வாட்ஸ்அப்</button>
-        <button type="button" class="btn btn-white" onclick="copyReceiptText()" data-i18n="btnCopy">📋 நகலெடு</button>
       </div>
     </div>
   </div>
@@ -4172,12 +4176,15 @@ CREATE POLICY "Valid ledger rows access"
         btnDelete: "நீக்கு",
         btnReceipt: "🧾 ரசீது",
         receiptModalTitle: "🧾 ரசீது (Receipt)",
+        btnBackToHistory: "வரலாறு பக்கத்திற்குத் திரும்புக",
         rcpScopeAll: "அனைத்துப் பதிவுகளும் (வரவு + செலவு)",
         rcpScopeInc: "வரவு / வசூல் மட்டும்",
         rcpScopeExp: "செலவு / அடப்பு மட்டும்",
         rcpTodayLbl: "இன்றைய தேதி:",
         rcpCustNamePh: "வாடிக்கையாளர் பெயர் (விருப்பத்திற்கு)",
-        rcpCustPhonePh: "கைபேசி எண் (வாட்ஸ்அப் அனுப்ப)",
+        rcpCustPhonePh: "கைபேசி எண் (10 இலக்கம்)",
+        rcpPhone10DigitErr: "கைபேசி எண் 10 இலக்கங்களாக இருக்க வேண்டும்!",
+        rcpPhone10DigitWarn: "10 இலக்க கைபேசி எண்ணை மட்டும் உள்ளிடவும்",
         rcpNotePh: "கூடுதல் குறிப்பு / வட்டி விவரம் (தேவைப்படின்)...",
         rcpLine1U: "உ",
         rcpLine2Sivamayam: "சிவமயம்",
@@ -4388,12 +4395,15 @@ CREATE POLICY "Valid ledger rows access"
         btnDelete: "Delete",
         btnReceipt: "🧾 Receipt",
         receiptModalTitle: "🧾 Official Receipt",
+        btnBackToHistory: "Back to History",
         rcpScopeAll: "All Entries (Income + Expense)",
         rcpScopeInc: "Income / Collection Only",
         rcpScopeExp: "Expense / Outflow Only",
         rcpTodayLbl: "Today Date:",
         rcpCustNamePh: "Customer Name (Optional)",
-        rcpCustPhonePh: "Mobile Number (For WhatsApp)",
+        rcpCustPhonePh: "Mobile Number (10 digits)",
+        rcpPhone10DigitErr: "Mobile number must be exactly 10 digits!",
+        rcpPhone10DigitWarn: "Please enter a 10-digit mobile number",
         rcpNotePh: "Extra Note / Interest Details (Optional)...",
         rcpLine1U: "U",
         rcpLine2Sivamayam: "SIVAMAYAM",
@@ -5428,9 +5438,11 @@ CREATE POLICY "Valid ledger rows access"
         ledger: "ledgerView",
         denom: "denomView",
         history: "historyView",
-        settings: "settingsView"
+        settings: "settingsView",
+        receipt: "receiptView"
       };
-      document.getElementById(views[viewKey]).classList.add("active");
+      const targetViewId = views[viewKey] || "ledgerView";
+      document.getElementById(targetViewId).classList.add("active");
 
       if (viewKey === "denom") renderDenomTable();
       if (viewKey === "history") renderHistory();
@@ -6797,7 +6809,11 @@ CREATE POLICY "Valid ledger rows access"
       if (noEl) noEl.textContent = `No: RCP-${String(dt).replace(/-/g, "")}`;
 
       renderReceiptBody();
-      document.getElementById("receiptModal").classList.add("open");
+      switchPage("receipt");
+    }
+
+    function backFromReceiptPage() {
+      switchPage("history");
     }
 
     function toggleReceiptRowCheck(idx, checked) {
@@ -6807,6 +6823,28 @@ CREATE POLICY "Valid ledger rows access"
         receiptExcludedIndices.add(idx);
       }
       renderReceiptBody();
+    }
+
+    function onReceiptPhoneInput(el) {
+      if (!el) return;
+      const digitsOnly = String(el.value || "").replace(/\D/g, "").slice(0, 10);
+      if (el.value !== digitsOnly) {
+        el.value = digitsOnly;
+      }
+      updateReceiptMetaDisplay();
+    }
+
+    function getValidatedReceiptPhone() {
+      const phoneEl = document.getElementById("receiptCustPhone");
+      const raw = (phoneEl ? phoneEl.value : "").replace(/\D/g, "").slice(0, 10);
+      if (!raw) {
+        return { isEmpty: true, isValid: true, digits: "" };
+      }
+      return {
+        isEmpty: false,
+        isValid: raw.length === 10,
+        digits: raw
+      };
     }
 
     function updateReceiptMetaDisplay() {
@@ -7375,14 +7413,17 @@ CREATE POLICY "Valid ledger rows access"
     }
 
     function shareReceiptWhatsApp() {
-      const txt = buildReceiptShareText();
-      const rawPhone = (document.getElementById("receiptCustPhone").value || "").replace(/\D/g, "");
-      let phoneParam = "";
-      if (rawPhone.length === 10) {
-        phoneParam = `91${rawPhone}`;
-      } else if (rawPhone.length > 10) {
-        phoneParam = rawPhone;
+      const phoneCheck = getValidatedReceiptPhone();
+      if (!phoneCheck.isEmpty && !phoneCheck.isValid) {
+        showToast(t("rcpPhone10DigitErr"));
+        const phoneEl = document.getElementById("receiptCustPhone");
+        if (phoneEl) phoneEl.focus();
+        return;
       }
+      const txt = buildReceiptShareText();
+      const phoneParam = phoneCheck.isValid && phoneCheck.digits.length === 10
+        ? `91${phoneCheck.digits}`
+        : "";
       const url = phoneParam
         ? `https://wa.me/${phoneParam}?text=${encodeURIComponent(txt)}`
         : `https://wa.me/?text=${encodeURIComponent(txt)}`;
@@ -8052,8 +8093,7 @@ Are you sure you want to unlock and edit it?`
         if (ev.key !== "Enter") return;
         const target = ev.target;
         if (!target || target.tagName !== "INPUT" || target.type !== "number") return;
-        const modalMask = target.closest(".modal-mask");
-        if (modalMask && modalMask.id === "receiptModal") {
+        if (target.closest("#receiptView")) {
           ev.preventDefault();
           renderReceiptBody();
           target.blur();
